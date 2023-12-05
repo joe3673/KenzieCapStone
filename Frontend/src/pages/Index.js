@@ -1,0 +1,4 @@
+/*
+Javascript for main page.
+
+*/
