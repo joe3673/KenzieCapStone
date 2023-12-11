@@ -1,32 +1,38 @@
 package com.kenzie.appserver.service.model;
 
-import org.apache.tomcat.jni.Local;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
-public class Event {
-   private  final String eventID;
+public class Event{
+   private final String eventID;
    private final String name;
    private final String location;
-   private final LocalDateTime date;
+   private final LocalDateTime startTime;
 
+   private final LocalDateTime endTime;
 
+   private final List<String> peopleAttending;
 
-    public Event(String eventID, String name, String location, LocalDateTime date) {
+   private final List<String> peopleAttended;
+
+   private final String eventSponsor;
+
+   
+    public Event(String eventID, String name, String location, LocalDateTime startTime, LocalDateTime endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor){
         this.eventID = eventID;
         this.name = name;
         this.location = location;
-        this.date = date;
-
-
-
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.peopleAttending = peopleAttending;
+        this.peopleAttended = peopleAttended;
+        this.eventSponsor = eventSponsor;
     }
 
-    public String getEventID(){
+    public String getEventID() {
         return eventID;
     }
+
     public String getName() {
         return name;
     }
@@ -35,8 +41,24 @@ public class Event {
         return location;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public List<String> getPeopleAttending() {
+        return peopleAttending;
+    }
+
+    public List<String> getPeopleAttended() {
+        return peopleAttended;
+    }
+
+    public String getEventSponsor() {
+        return eventSponsor;
+    }
 }
+
