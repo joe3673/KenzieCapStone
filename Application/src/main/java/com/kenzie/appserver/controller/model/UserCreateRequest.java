@@ -1,9 +1,7 @@
 package com.kenzie.appserver.controller.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenzie.appserver.service.model.Event;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class UserCreateRequest{
     private String password;
 
     @JsonProperty("eventsList")
-    private List<Event> eventsList;
+    private List<String> eventsList;
 
     @JsonProperty("email")
     private String email;
@@ -48,11 +46,11 @@ public class UserCreateRequest{
         this.password = password;
     }
 
-    public List<Event> getEventsList() {
+    public List<String> getEventsList() {
         return eventsList;
     }
 
-    public void setEventsList(List<Event> eventsList) {
+    public void setEventsList(List<String> eventsList) {
         this.eventsList = eventsList;
     }
 
@@ -96,4 +94,3 @@ public class UserCreateRequest{
         this.userType = userType;
     }
 }
-
