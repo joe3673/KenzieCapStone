@@ -1,7 +1,7 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenzie.appserver.service.model.Event;
+
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class UserResponse{
     private String userName;
 
     @JsonProperty("eventsList")
-    private List<Event> eventsList;
+    private List<String> eventsList;
 
     @JsonProperty("email")
     private String email;
@@ -35,11 +35,11 @@ public class UserResponse{
         this.userName = userName;
     }
 
-    public List<Event> getEventsList() {
+    public List<String> getEventsList() {
         return eventsList;
     }
 
-    public void setEventsList(List<Event> eventsList) {
+    public void setEventsList(List<String> eventsList) {
         this.eventsList = eventsList;
     }
 
@@ -84,3 +84,4 @@ public class UserResponse{
     }
 
 }
+
