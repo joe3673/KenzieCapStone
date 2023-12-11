@@ -5,52 +5,95 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Event;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 public class UserCreateRequest{
-
-    @NotEmpty
-    @JsonProperty("id")
-    private String userID;
-
-    @NotEmpty
     @JsonProperty("username")
     private String userName;
 
-    @NotEmpty
     @JsonProperty("password")
     private String password;
 
     @JsonProperty("eventsList")
     private List<Event> eventsList;
 
+    @JsonProperty("email")
+    private String email;
 
-    public String getUserID(){
-        return userID;
-    }
+    @JsonProperty("firstName")
+    private String firstName;
+
+    @JsonProperty("lastName")
+    private String lastName;
+
+    @JsonProperty("notifications")
+    private List<String> notifications;
+
+    @JsonProperty("userType")
+    private String userType;
 
     public String getUserName() {
         return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public List<Event> getEventsList() {
-        return eventsList;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Event> getEventsList() {
+        return eventsList;
     }
 
     public void setEventsList(List<Event> eventsList) {
         this.eventsList = eventsList;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public List<String> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<String> notifications) {
+        this.notifications = notifications;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 }
+
