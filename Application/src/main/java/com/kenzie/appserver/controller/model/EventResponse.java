@@ -11,6 +11,8 @@ import java.util.List;
 public class EventResponse{
 
 
+    @JsonProperty("eventId")
+    private String eventId;
     @JsonProperty("name")
     private String name;
 
@@ -35,7 +37,13 @@ public class EventResponse{
     private String eventSponsor;
 
 
+    public String getEventId() {
+        return eventId;
+    }
 
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
     public String getName() {
         return name;

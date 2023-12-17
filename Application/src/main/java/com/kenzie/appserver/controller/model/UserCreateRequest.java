@@ -6,14 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class UserCreateRequest{
+
+    @JsonProperty("userId")
+    private String userId;
+
     @JsonProperty("username")
     private String userName;
 
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("eventsList")
-    private List<String> eventsList;
 
     @JsonProperty("email")
     private String email;
@@ -24,11 +26,17 @@ public class UserCreateRequest{
     @JsonProperty("lastName")
     private String lastName;
 
-    @JsonProperty("notifications")
-    private List<String> notifications;
 
     @JsonProperty("userType")
     private String userType;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -46,13 +54,6 @@ public class UserCreateRequest{
         this.password = password;
     }
 
-    public List<String> getEventsList() {
-        return eventsList;
-    }
-
-    public void setEventsList(List<String> eventsList) {
-        this.eventsList = eventsList;
-    }
 
     public String getEmail() {
         return email;
@@ -78,13 +79,7 @@ public class UserCreateRequest{
         this.lastName = lastName;
     }
 
-    public List<String> getNotifications() {
-        return notifications;
-    }
 
-    public void setNotifications(List<String> notifications) {
-        this.notifications = notifications;
-    }
 
     public String getUserType() {
         return userType;
