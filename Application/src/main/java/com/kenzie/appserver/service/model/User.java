@@ -7,24 +7,25 @@ public class User{
     private final String userID;
     private final String userName;
     private final String password;
-    private List<String> eventsList;
+    private final List<String> eventsList;
     private final String email;
     private final String firstName;
     private final String lastName;
-    private  List<String> notifications;
+    private final List<String> notifications;
     private final String userType;
 
 
-    public User(String userID, String userName, String password, String email, String firstName, String lastName, String userType) {
+    public User(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType) {
         this.userID = userID;
         this.userName = userName;
         this.password = password;
+        this.eventsList = eventsList;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.notifications = notifications;
         this.userType = userType;
     }
-
 
     public String getUserID(){
         return userID;
@@ -60,13 +61,5 @@ public class User{
 
     public String getUserType(){
         return userType;
-    }
-
-    public void setEventsList(List<String> eventsList) {
-        this.eventsList = eventsList;
-    }
-
-    public void setNotifications(List<String> notifications) {
-        this.notifications = notifications;
     }
 }
