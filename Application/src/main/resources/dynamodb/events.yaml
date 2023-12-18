@@ -1,0 +1,28 @@
+Resources:
+  EventsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Events
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "eventName"
+          AttributeType: "S"
+        - AttributeName: "startTime"
+          AttributeType: "S"
+        - AttributeName: "endTime"
+          AttributeType: "S"
+        - AttributeName: "eventLocation"
+          AttributeType: "S"
+        - AttributeName: "eventSponsor"
+          AttributeType: "S"
+        - AttributeName: "peopleAttended"
+          AttributeType: "S"
+        - AttributeName: "peopleAttending"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        - AttributeName: "eventName"
+          KeyType: "RANGE"
+      BillingMode: "PAY_PER_REQUEST"

@@ -19,7 +19,6 @@ public class ExampleService {
     }
 
     public Example findById(String id) {
-
         // Example getting data from the lambda
         ExampleData dataFromLambda = lambdaServiceClient.getExampleData(id);
 
