@@ -2,9 +2,10 @@ package com.kenzie.appserver.repositories.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.kenzie.appserver.service.model.Event;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserRecord{
     private final String userID;
@@ -28,6 +29,19 @@ public class UserRecord{
         this.lastName = lastName;
         this.notifications = notifications;
         this.userType = userType;
+    }
+
+    public UserRecord(String userName, String password, String email, String firstName, String lastName, String userType) {
+        this.userID = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = userType;
+
+        this.eventsList = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     @DynamoDBHashKey(attributeName = "ID")
