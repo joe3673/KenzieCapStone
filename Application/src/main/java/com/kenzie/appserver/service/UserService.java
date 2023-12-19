@@ -35,6 +35,16 @@ public class UserService {
         return ur;
     }
 
+    public boolean validateUser (String id, String password){
+        Optional<UserRecord> user = userRepository.findById(id);
+
+        if(user.isPresent()){
+            UserRecord userRecord = user.get();
+            return userRecord.getPassword().equals(password);
+        }
+        return false;
+    }
+
     public List<UserRecord> getAllUsers() {
         List<UserRecord> users = new ArrayList<>();
         Iterable<UserRecord> pulledUsers = userRepository.findAll();
@@ -80,4 +90,5 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 }
+
 
