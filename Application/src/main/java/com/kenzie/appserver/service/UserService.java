@@ -2,7 +2,10 @@ package com.kenzie.appserver.service;
 
 
 import com.kenzie.appserver.repositories.UserRepository;
+import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
+import com.kenzie.appserver.service.model.Event;
+import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 
 import java.util.ArrayList;
@@ -55,6 +58,26 @@ public class UserService {
         userRepository.save(ur);
 
         return ur;
+    }
+
+    public void updateUser(User user) {
+        if (userRepository.existsById(user.getUserID())) {
+            UserRecord ur = new UserRecord(user.getUserID(),
+                    user.getUserName(),
+                    user.getPassword(),
+                    user.getEventsList(),
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getNotifications(),
+                    user.getUserType());
+
+            userRepository.save(ur);
+        }
+    }
+
+    public void deleteUserById(String userId) {
+        userRepository.deleteById(userId);
     }
 }
 

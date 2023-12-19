@@ -30,7 +30,7 @@ public class UserController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        UserResponse userResponse = createUserResponse(user);
+        UserResponse userResponse = createUserResponseFromRecord(user);
         return ResponseEntity.ok(userResponse);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
 
         List<UserResponse> responses = new ArrayList<>();
         for (UserRecord user : users) {
-            responses.add(createUserResponse(user));
+            responses.add(createUserResponseFromRecord(user));
         }
         return ResponseEntity.ok(responses);
     }
@@ -65,11 +65,11 @@ public class UserController {
 
         userService.addNewUser(user.getFirstName(), user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getUserType());
 
-        UserResponse userResponse = createUserResponse(user);
+        UserResponse userResponse = createUserResponseFromRecord(user);
         return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
     }
 
-   /*
+    /*
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
         User user = new User(
@@ -89,18 +89,26 @@ public class UserController {
         UserResponse userResponse = createUserResponse(user);
         return ResponseEntity.ok(userResponse);
     }
-
     */
-/*
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("userId") String userId) {
-        userService.deleteUser(userId);
+        userService.deleteUserById(userId);
         return ResponseEntity.noContent().build();
     }
 
- */
-
-    private UserResponse createUserResponse(UserRecord user) {
+    private UserResponse createUserResponseFromRecord(UserRecord user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUserID(user.getUserID());
+        userResponse.setUserName(user.getUserName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setNotifications(user.getNotifications());
+        userResponse.setUserType(user.getUserType());
+        return userResponse;
+    }
+    private UserResponse createUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUserID(user.getUserID());
         userResponse.setUserName(user.getUserName());
