@@ -1,6 +1,8 @@
 package com.kenzie.appserver.service.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class User{
 
@@ -25,6 +27,19 @@ public class User{
         this.lastName = lastName;
         this.notifications = notifications;
         this.userType = userType;
+    }
+
+    public User(String userName, String password, String email, String firstName, String lastName, String userType) {
+        this.userID = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = userType;
+
+        this.eventsList = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     public String getUserID(){

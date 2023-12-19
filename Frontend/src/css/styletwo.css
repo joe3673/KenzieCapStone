@@ -17,33 +17,30 @@ body {
 }
 
 .custom-background {
-      background-image: url('images/lowerlogo.png');
-        background-repeat: no-repeat;
-          background-attachment: fixed;
-          background-position: bottom right;
-
+        background-image: url("images/top.png");
+                       background-repeat: no-repeat;
+                                 background-size: 20px 40px;
 }
 
 .background {
-              background-image: url("marble-logo.png");
+              background-image: url("images/top.png");
                  background-repeat: no-repeat;
-                           background-size: contain;
+                            background-size: 20px 40px;
             }
 
 .header {
-    /* Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    background-color: var(--primary-color);
+    background-position: center;
+    height: 33.33vh;
     color: var(--secondary-color);
     padding: 0 20px;
 }
 
 .header_home {
-    font-size: 36px;
-    line-height: 40px;
-    height: 100px;
+    font-size: 24px;
+    line-height: 1.5;
     text-decoration: none;
     color: var(--secondary-color);
 }
@@ -53,6 +50,7 @@ body {
     vertical-align: top;
     line-height: 40px;
 }
+
 
 .about {
     margin-left: 20px;
@@ -93,10 +91,6 @@ body {
 .card-content .form-field {
     display: flex;
     flex-direction: column;
-}
-
-#concert-list li {
-    margin-bottom: 1rem;
 }
 
 .state {
