@@ -34,6 +34,17 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
+
+    @PostMapping
+    public ResponseEntity<UserResponse> loginUser(@RequestBody String userName, @RequestBody String password){
+        if (userService.validateUser(userName, password)){
+            return getUserById(userName);
+        }
+        else{
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserRecord> users = userService.getAllUsers();
@@ -52,7 +63,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> addUser(@RequestBody UserCreateRequest userCreateRequest) {
         UserRecord user = new UserRecord(
-                userCreateReuqest.getUserName(),
+                userCreateRequest.getUserName(),
                 userCreateRequest.getUserName(),
                 userCreateRequest.getPassword(),
                 userCreateRequest.getEventsList(),
