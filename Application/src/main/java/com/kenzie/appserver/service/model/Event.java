@@ -59,5 +59,7 @@ public class Event{
     public String getEventSponsor() {
         return eventSponsor;
     }
+
+
 }
 
