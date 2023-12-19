@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class UserResponse{
+
+    @JsonProperty("userID")
+    public String userID;
+
     @JsonProperty("username")
     private String userName;
 
@@ -27,6 +31,10 @@ public class UserResponse{
     @JsonProperty("userType")
     private String userType;
 
+    public String getUserID() {
+        return userID;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -45,6 +53,10 @@ public class UserResponse{
 
     public String getEmail() {
         return email;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public void setEmail(String email) {
@@ -82,6 +94,7 @@ public class UserResponse{
     public void setUserType(String userType) {
         this.userType = userType;
     }
+
 
 }
 

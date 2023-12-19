@@ -1,5 +1,6 @@
 package com.kenzie.appserver.controller.model;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,7 +35,8 @@ public class EventResponse{
     @JsonProperty("eventSponsor")
     private String eventSponsor;
 
-
+    @JsonProperty("eventId")
+    private String eventId;
 
 
     public String getName() {
@@ -66,6 +68,8 @@ public class EventResponse{
         return eventSponsor;
     }
 
+    public String getEventId() { return eventId;}
+
     public void setName(String name) {
         this.name = name;
     }
@@ -92,6 +96,11 @@ public class EventResponse{
 
     public void setEventSponsor(String eventSponsor) {
         this.eventSponsor = eventSponsor;
+    }
+
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 }
 
