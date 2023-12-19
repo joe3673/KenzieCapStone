@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> addUser(@RequestBody UserCreateRequest userCreateRequest) {
         UserRecord user = new UserRecord(
-                UUID.randomUUID().toString(),
+                userCreateRequest.getUserName(),
                 userCreateRequest.getUserName(),
                 userCreateRequest.getPassword(),
                 userCreateRequest.getEventsList(),
