@@ -5,10 +5,12 @@ import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.model.Event;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,7 +64,7 @@ public class EventController {
         eventService.addNewEvent(event);
 
         EventResponse eventResponse = createEventResponse(event);
-        return ResponseEntity.created(URI.create("/events/" + eventResponse.getEventId())).body(eventResponse);
+        return ResponseEntity.created(URI.create("//" + eventResponse.getEventId())).body(eventResponse);
     }
 /*
     @PutMapping("/{eventId}")
@@ -87,8 +89,38 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     public ResponseEntity<Void> deleteEventById(@PathVariable("eventId") String eventId) {
-        eventService.deleteEvent(eventId);
-        return ResponseEntity.noContent().build();
+        Event eventToDelete = eventService.findByEventId(eventId);
+
+        if (eventToDelete == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (hasEventOccurred(eventToDelete.getEndTime())) {
+            eventService.deleteEvent(eventId);
+            return ResponseEntity.noContent().build();
+        } else {
+//            return Status Code or log message if event not found or not occurred?
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+    }
+    private boolean hasEventOccurred(LocalDateTime eventEndTime) {
+        return LocalDateTime.now().isAfter(eventEndTime);
+    }
+//  Not sure I need this in the Event Controller
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<EventResponse>> getEventsAttendedByFriends(@PathVariable("userId") String userId) {
+        List<Event> eventsAttendedByFriends = eventService.getEventsAttendedByFriends(userId);
+
+        if (eventsAttendedByFriends == null || eventsAttendedByFriends.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<EventResponse> responses = new ArrayList<>();
+        for (Event event : eventsAttendedByFriends) {
+            responses.add(createEventResponse(event));
+        }
+        return ResponseEntity.ok(responses);
     }
 
     private EventResponse createEventResponse(Event event) {

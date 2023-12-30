@@ -1,10 +1,13 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.repositories.EventRepository;
+import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.service.model.Event;
+import com.kenzie.appserver.service.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +83,30 @@ public class EventService {
     }
 
     public void deleteEvent(String eventId) {
-        eventRepository.deleteById(eventId);
+        Event eventToDelete = findByEventId(eventId);
+
+        if (eventToDelete != null && hasEventOccurred(eventToDelete.getEndTime())) {
+            eventRepository.deleteById(eventId);
+        } else {
+//            Event not found or has not occurred, throw exception or log message?
+        }
+    }
+    private boolean hasEventOccurred(LocalDateTime eventEndTime) {
+        return LocalDateTime.now().isAfter(eventEndTime);
     }
 
+    public List<Event> getEventsAttendedByFriends(String userId) {
+        User user = UserRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        List<Event> eventsAttendedByFriends = new ArrayList<>();
+
+        for (User friend : user.getFriends()) {
+            eventsAttendedByFriends.addAll(friend.getAttendedEvents);
+        }
+        return eventsAttendedByFriends;
+    }
 }
