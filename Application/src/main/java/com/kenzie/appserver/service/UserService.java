@@ -89,6 +89,25 @@ public class UserService {
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
     }
+
+    public void shareEventWithFriend(String userId, String eventId) {
+        UserRecord user = findUserById(userId);
+
+        List<String> friendsEvents = user.getEventsList();
+        friendsEvents.add(eventId);
+
+        user.setEventsList(friendsEvents);
+
+        userRepository.save(user);
+    }
+
+    public List<String> viewFriendsEvents(String userId) {
+        UserRecord user = findUserById(userId);
+
+        List<String> friendsEvents = user.getEventsList();
+
+        return friendsEvents;
+    }
 }
 
 
