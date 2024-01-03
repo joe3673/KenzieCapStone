@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 
+import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
@@ -24,20 +25,19 @@ public class UserService {
     public UserRecord findUserById(String id) {
         Optional<UserRecord> user = userRepository.findById(id);
 
-        if (!user.isPresent() || user.isEmpty()) return null;
+        if (user.isEmpty()) throw new UserNotFoundException("User " + id + " does not exist.");
 
         UserRecord userRecord = user.get();
 
         UserRecord ur = new UserRecord(userRecord.getUserID(), userRecord.getUserName(), userRecord.getPassword(),
                 userRecord.getEventsList(), userRecord.getEmail(), userRecord.getFirstName(), userRecord.getLastName(),
-                userRecord.getNotifications(), userRecord.getUserType());
+                userRecord.getNotifications(), userRecord.getUserType(), userRecord.getFriends());
 
         return ur;
     }
 
     public boolean validateUser (String id, String password){
         Optional<UserRecord> user = userRepository.findById(id);
-
         if(user.isPresent()){
             UserRecord userRecord = user.get();
             return userRecord.getPassword().equals(password);
@@ -49,12 +49,10 @@ public class UserService {
         List<UserRecord> users = new ArrayList<>();
         Iterable<UserRecord> pulledUsers = userRepository.findAll();
 
-        if (pulledUsers == null) return null;
-
         for (UserRecord ur : pulledUsers) {
             UserRecord currentRecord = new UserRecord(ur.getUserID(), ur.getUserName(), ur.getPassword(),
                     ur.getEventsList(), ur.getEmail(), ur.getFirstName(), ur.getLastName(),
-                    ur.getNotifications(), ur.getUserType());
+                    ur.getNotifications(), ur.getUserType(), ur.getFriends());
 
             users.add(currentRecord);
         }
@@ -64,9 +62,7 @@ public class UserService {
 
     public UserRecord addNewUser(String userName, String password, String email, String firstName, String lastName, String userType) {
         UserRecord ur = new UserRecord(userName, password, email, firstName, lastName, userType);
-
         userRepository.save(ur);
-
         return ur;
     }
 
@@ -75,6 +71,7 @@ public class UserService {
     }
 
 
+    /*
     public void updateUser(User user) {
         if (userRepository.existsById(user.getUserID())) {
             UserRecord ur = new UserRecord(user.getUserID(),
@@ -90,6 +87,7 @@ public class UserService {
             userRepository.save(ur);
         }
     }
+     */
 
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
@@ -108,12 +106,15 @@ public class UserService {
 
     public List<String> viewFriendsEvents(String userId) {
         UserRecord user = findUserById(userId);
-
-        List<String> friendsEvents = user.getEventsList();
-
-        return friendsEvents;
+        if(user == null){
+            throw new UserNotFoundException("User " + userId + " does not exist.");
+        }
+        return user.getEventsList();
     }
 
+
+
 }
+
 
 
