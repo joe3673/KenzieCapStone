@@ -35,7 +35,7 @@ public class UserRecord{
     }
 
     public UserRecord(String userName, String password, String email, String firstName, String lastName, String userType) {
-        this.userID = UUID.randomUUID().toString();
+        this.userID = userName;
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -45,6 +45,7 @@ public class UserRecord{
 
         this.eventsList = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.friends = new ArrayList<>();
     }
 
     @DynamoDBHashKey(attributeName = "id")
@@ -134,3 +135,4 @@ public class UserRecord{
     }
 
 }
+
