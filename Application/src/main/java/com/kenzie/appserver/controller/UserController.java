@@ -1,12 +1,15 @@
 package com.kenzie.appserver.controller;
 
 
+import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.UserService;
+import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +83,6 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
     }
 
-    /*
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
         User user = new User(
@@ -108,6 +110,33 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{userId}")
+    public ResponseEntity<Void> shareEventsWithFriends(@PathVariable("userId") String userId,
+                                                       @PathVariable("eventId") String eventId) {
+
+        boolean sharingSuccessful = userService.shareEventsWithFriends(userId, eventId);
+
+        if (sharingSuccessful) {
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    public ResponseEntity<List<EventResponse>> getEventsAttendedByFriends(@PathVariable("userId") String userId) {
+        List<Event> eventsAttendedByFriends = userService.getEventEventsAttendedByFriends(userId);
+
+        if (eventsAttendedByFriends == null || eventsAttendedByFriends.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<EventResponse> responses = new ArrayList<>();
+        for (Event event : eventsAttendedByFriends) {
+            responses.add(createEventResponse(event));
+        }
+        return ResponseEntity.ok(responses);
+    }
+
     private UserResponse createUserResponseFromRecord(UserRecord user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUserID(user.getUserID());
@@ -119,6 +148,7 @@ public class UserController {
         userResponse.setUserType(user.getUserType());
         return userResponse;
     }
+  
     private UserResponse createUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUserID(user.getUserID());
@@ -129,5 +159,11 @@ public class UserController {
         userResponse.setNotifications(user.getNotifications());
         userResponse.setUserType(user.getUserType());
         return userResponse;
+    }
+
+    private  EventResponse createEventResponse(Event event) {
+        EventResponse eventResponse = new EventResponse();
+//        Set other event properties?
+        return eventResponse;
     }
 }

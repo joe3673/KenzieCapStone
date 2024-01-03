@@ -70,6 +70,11 @@ public class UserService {
         return ur;
     }
 
+    public boolean shareEventsWithFriends(String userId, String eventId) {
+        return true;
+    }
+
+
     public void updateUser(User user) {
         if (userRepository.existsById(user.getUserID())) {
             UserRecord ur = new UserRecord(user.getUserID(),
@@ -108,6 +113,7 @@ public class UserService {
 
         return friendsEvents;
     }
+
 }
 
 
