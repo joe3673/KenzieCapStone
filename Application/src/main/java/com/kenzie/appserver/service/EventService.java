@@ -1,8 +1,10 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
+import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EventService {
     private EventRepository eventRepository;
 
+    private UserRepository userRepository;
+
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Event> findAllEvents() {
@@ -83,7 +89,19 @@ public class EventService {
      */
 
     public void deleteEvent(String eventId) {
-        eventRepository.deleteById(eventId);
+        Event event = findByEventId(eventId);
+        if(event != null){
+            List<String> peopleAttending = event.getPeopleAttending();
+            for(int i = 0, size = peopleAttending.size(); i < size; ++i){
+                Optional<UserRecord> ur = userRepository.findById(peopleAttending.get(i));
+                if(ur.isPresent()){
+                    UserRecord userRecord = ur.get();
+                    userRecord.getEventsList().remove(eventId);
+                    userRepository.save(userRecord);
+                }
+            }
+            eventRepository.deleteById(eventId);
+        }
     }
     private boolean hasEventOccurred(LocalDateTime eventEndTime) {
         return LocalDateTime.now().isAfter(eventEndTime);
