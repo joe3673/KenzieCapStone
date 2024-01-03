@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/Event")
-public class EventController {
+public class EventController{
     private final EventService eventService;
     public EventController(EventService eventService) {
         this.eventService = eventService;
@@ -37,11 +37,6 @@ public class EventController {
     @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         List<Event> events = eventService.findAllEvents();
-
-        if (events == null || events.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
         List<EventResponse> responses = new ArrayList<>();
         for (Event event : events) {
             responses.add(createEventResponse(event));
@@ -51,8 +46,6 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<EventResponse> addNewEvent(@RequestBody EventCreateRequest eventCreateRequest) {
-        // Should I put Input validation
-
         Event event = new Event(UUID.randomUUID().toString(),
                 eventCreateRequest.getName(),
                 eventCreateRequest.getLocation(),
@@ -89,39 +82,11 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     public ResponseEntity<Void> deleteEventById(@PathVariable("eventId") String eventId) {
-        Event eventToDelete = eventService.findByEventId(eventId);
-
-        if (eventToDelete == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (hasEventOccurred(eventToDelete.getEndTime())) {
-            eventService.deleteEvent(eventId);
-            return ResponseEntity.noContent().build();
-        } else {
-//            return Status Code or log message if event not found or not occurred?
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
+        eventService.findByEventId(eventId);
+        return ResponseEntity.ok().build();
     }
-    private boolean hasEventOccurred(LocalDateTime eventEndTime) {
-        return LocalDateTime.now().isAfter(eventEndTime);
-    }
-//  Not sure I need this in the Event Controller
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<EventResponse>> getEventsAttendedByFriends(@PathVariable("userId") String userId) {
-        List<Event> eventsAttendedByFriends = eventService.getEventsAttendedByFriends(userId);
 
-        if (eventsAttendedByFriends == null || eventsAttendedByFriends.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
 
-        List<EventResponse> responses = new ArrayList<>();
-        for (Event event : eventsAttendedByFriends) {
-            responses.add(createEventResponse(event));
-        }
-        return ResponseEntity.ok(responses);
-    }
 
     private EventResponse createEventResponse(Event event) {
         EventResponse eventResponse = new EventResponse();
