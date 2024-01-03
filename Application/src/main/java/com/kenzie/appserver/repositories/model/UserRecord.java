@@ -47,7 +47,7 @@ public class UserRecord{
         this.notifications = new ArrayList<>();
     }
 
-    @DynamoDBHashKey(attributeName = "ID")
+    @DynamoDBHashKey(attributeName = "id")
     public String getUserID(){
         return userID;
     }
