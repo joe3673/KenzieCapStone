@@ -38,7 +38,7 @@ public class EventService {
     }
 
     public Event findByEventId(String eventId) {
-        Event eventFromBackendService = eventRepository.findById(eventId)
+        return eventRepository.findById(eventId)
                 .map(event -> new Event(
                         event.getEventID(),
                         event.getName(),
@@ -49,8 +49,6 @@ public class EventService {
                         event.getPeopleAttended(),
                         event.getEventSponsor()))
                 .orElse(null);
-
-        return eventFromBackendService;
     }
 
     public Event addNewEvent(Event event) {
@@ -67,8 +65,9 @@ public class EventService {
         return event;
     }
 
+    /*
     public void updateEvent(Event event) {
-        if (eventRepository.existsById(event.getEventID())) {
+        if (eventRepository.existsById(event.getEventID())){
             EventRecord eventRecord = new EventRecord(
                     event.getEventID(),
                     event.getName(),
@@ -81,33 +80,13 @@ public class EventService {
             eventRepository.save(eventRecord);
         }
     }
+     */
 
     public void deleteEvent(String eventId) {
-        Event eventToDelete = findByEventId(eventId);
-
-        if (eventToDelete != null && hasEventOccurred(eventToDelete.getEndTime())) {
-            eventRepository.deleteById(eventId);
-        } else {
-//            Event not found or has not occurred, throw exception or log message?
-        }
+        eventRepository.deleteById(eventId);
     }
     private boolean hasEventOccurred(LocalDateTime eventEndTime) {
         return LocalDateTime.now().isAfter(eventEndTime);
-    }
-
-    public List<Event> getEventsAttendedByFriends(String userId) {
-        User user = UserRepository.findById(userId).orElse(null);
-
-        if (user == null) {
-            return null;
-        }
-
-        List<Event> eventsAttendedByFriends = new ArrayList<>();
-
-        for (User friend : user.getFriends()) {
-            eventsAttendedByFriends.addAll(friend.getAttendedEvents);
-        }
-        return eventsAttendedByFriends;
     }
 
 }
