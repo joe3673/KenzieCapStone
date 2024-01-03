@@ -33,7 +33,7 @@ public class User{
     }
 
     public User(String userName, String password, String email, String firstName, String lastName, String userType) {
-        this.userID = UUID.randomUUID().toString();
+        this.userID = userName;
         this.userName = userName;
         this.password = password;
         this.email = email;
