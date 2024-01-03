@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.repositories.EventRepository;
+import com.kenzie.appserver.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,10 +13,14 @@ public class EventServiceTest {
     private EventRepository eventRepository;
     private EventService eventService;
 
+    private UserRepository userRepository;
+
+
     @BeforeEach
     void setup() {
         eventRepository = mock(EventRepository.class);
-        eventService = new EventService(eventRepository);
+        userRepository = mock(UserRepository.class);
+        eventService = new EventService(eventRepository, userRepository);
     }
 
     // TODO deleteEvent() unit tests
