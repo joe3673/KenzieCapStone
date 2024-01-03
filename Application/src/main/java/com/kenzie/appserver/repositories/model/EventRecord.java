@@ -35,7 +35,7 @@ public class EventRecord{
         this.eventSponsor = eventSponsor;
     }
 
-    @DynamoDBHashKey(attributeName = "ID")
+    @DynamoDBHashKey(attributeName = "id")
     public String getEventID() {
         return eventID;
     }
