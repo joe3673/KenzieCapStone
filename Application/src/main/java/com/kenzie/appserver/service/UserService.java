@@ -2,6 +2,7 @@ package com.kenzie.appserver.service;
 
 
 import com.kenzie.appserver.repositories.UserRepository;
+import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
@@ -34,6 +35,16 @@ public class UserService {
         return ur;
     }
 
+    public boolean validateUser (String id, String password){
+        Optional<UserRecord> user = userRepository.findById(id);
+
+        if(user.isPresent()){
+            UserRecord userRecord = user.get();
+            return userRecord.getPassword().equals(password);
+        }
+        return false;
+    }
+
     public List<UserRecord> getAllUsers() {
         List<UserRecord> users = new ArrayList<>();
         Iterable<UserRecord> pulledUsers = userRepository.findAll();
@@ -63,5 +74,46 @@ public class UserService {
         return true;
     }
 
+
+    public void updateUser(User user) {
+        if (userRepository.existsById(user.getUserID())) {
+            UserRecord ur = new UserRecord(user.getUserID(),
+                    user.getUserName(),
+                    user.getPassword(),
+                    user.getEventsList(),
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getNotifications(),
+                    user.getUserType());
+
+            userRepository.save(ur);
+        }
+    }
+
+    public void deleteUserById(String userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public void shareEventWithFriend(String userId, String eventId) {
+        UserRecord user = findUserById(userId);
+
+        List<String> friendsEvents = user.getEventsList();
+        friendsEvents.add(eventId);
+
+        user.setEventsList(friendsEvents);
+
+        userRepository.save(user);
+    }
+
+    public List<String> viewFriendsEvents(String userId) {
+        UserRecord user = findUserById(userId);
+
+        List<String> friendsEvents = user.getEventsList();
+
+        return friendsEvents;
+    }
+
 }
+
 

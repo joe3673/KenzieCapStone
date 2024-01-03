@@ -109,4 +109,5 @@ public class EventService {
         }
         return eventsAttendedByFriends;
     }
+
 }
