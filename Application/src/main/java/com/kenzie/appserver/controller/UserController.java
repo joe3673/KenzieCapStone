@@ -5,7 +5,10 @@ import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.controller.model.UserUpdateRequest;
+import com.kenzie.appserver.exception.EventNotFoundException;
+import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.model.UserRecord;
+import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
@@ -23,16 +26,23 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final EventService eventService;
+
+    public UserController(UserService userService, EventService eventService) {
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("userId") String userId) {
-        UserRecord user = userService.findUserById(userId);
-        if (user == null) {
+        UserRecord user;
+        try{
+            user = userService.findUserById(userId);
+        }
+        catch (UserNotFoundException ex){
             return ResponseEntity.notFound().build();
         }
+
         UserResponse userResponse = createUserResponseFromRecord(user);
         return ResponseEntity.ok(userResponse);
     }
@@ -40,7 +50,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> loginUser(@RequestBody String userName, @RequestBody String password){
-        if (userService.validateUser(userName, password)){
+        if(userService.validateUser(userName, password)){
             return getUserById(userName);
         }
         else{
@@ -51,11 +61,6 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserRecord> users = userService.getAllUsers();
-
-        if (users == null || users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
         List<UserResponse> responses = new ArrayList<>();
         for (UserRecord user : users) {
             responses.add(createUserResponseFromRecord(user));
@@ -65,24 +70,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> addUser(@RequestBody UserCreateRequest userCreateRequest) {
-        UserRecord user = new UserRecord(
-                userCreateRequest.getUserName(),
-                userCreateRequest.getUserName(),
-                userCreateRequest.getPassword(),
-                userCreateRequest.getEventsList(),
-                userCreateRequest.getEmail(),
-                userCreateRequest.getFirstName(),
-                userCreateRequest.getLastName(),
-                userCreateRequest.getNotifications(),
-                userCreateRequest.getUserType()
-        );
-
-        userService.addNewUser(user.getFirstName(), user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getUserType());
+        UserRecord user = userService.addNewUser(userCreateRequest.getUserName(), userCreateRequest.getPassword(), userCreateRequest.getEmail(), userCreateRequest.getFirstName(), userCreateRequest.getLastName(), userCreateRequest.getUserType());
 
         UserResponse userResponse = createUserResponseFromRecord(user);
         return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
     }
 
+    /*
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
         User user = new User(
@@ -124,14 +118,26 @@ public class UserController {
     }
 
     public ResponseEntity<List<EventResponse>> getEventsAttendedByFriends(@PathVariable("userId") String userId) {
-        List<Event> eventsAttendedByFriends = userService.getEventEventsAttendedByFriends(userId);
+        List<String> eventsAttendedByFriends = new ArrayList<>();
+        try {
+            eventsAttendedByFriends = userService.viewFriendsEvents(userId);
+        }
+        catch (UserNotFoundException ex){
+            return ResponseEntity.badRequest().build();
+        }
 
-        if (eventsAttendedByFriends == null || eventsAttendedByFriends.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        List<Event> events = new ArrayList<>(eventsAttendedByFriends.size());
+        for(int i = 0, size = eventsAttendedByFriends.size(); i < size; ++i){
+            try{
+                events.add(eventService.findByEventId(eventsAttendedByFriends.get(i)));
+            }
+            catch(EventNotFoundException ex){
+
+            }
         }
 
         List<EventResponse> responses = new ArrayList<>();
-        for (Event event : eventsAttendedByFriends) {
+        for (Event event : events) {
             responses.add(createEventResponse(event));
         }
         return ResponseEntity.ok(responses);
