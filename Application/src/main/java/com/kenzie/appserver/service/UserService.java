@@ -2,6 +2,7 @@ package com.kenzie.appserver.service;
 
 
 import com.kenzie.appserver.exception.UserNotFoundException;
+import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
@@ -15,11 +16,14 @@ import java.util.Optional;
 
 public class UserService {
     private UserRepository userRepository;
-    private LambdaServiceClient lambdaServiceClient;
 
-    public UserService(UserRepository userRepository, LambdaServiceClient lambdaServiceClient) {
+    private EventRepository eventRepository;
+
+
+
+    public UserService(UserRepository userRepository, EventRepository eventRepository) {
         this.userRepository = userRepository;
-        this.lambdaServiceClient = lambdaServiceClient;
+        this.eventRepository = eventRepository;
     }
 
     public UserRecord findUserById(String id) {
@@ -70,8 +74,20 @@ public class UserService {
         return true;
     }
 
+    public void addEventToList(String userId, String eventId){
+        Optional<UserRecord> ur = userRepository.findById(userId);
+        Optional<EventRecord> er = eventRepository.findById(eventId);
+        if(ur.isEmpty() || er.isEmpty()){
+            return;
+        }
+        UserRecord userRecord = ur.get();
+        if(userRecord.getEventsList().contains(eventId)){
+            return;
+        }
+        userRecord.getEventsList().add(eventId);
+        userRepository.save(userRecord);
+    }
 
-    /*
     public void updateUser(User user) {
         if (userRepository.existsById(user.getUserID())) {
             UserRecord ur = new UserRecord(user.getUserID(),
@@ -82,12 +98,13 @@ public class UserService {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getNotifications(),
-                    user.getUserType());
+                    user.getUserType(),
+                    user.getFriends());
 
             userRepository.save(ur);
         }
     }
-     */
+
 
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
@@ -112,12 +129,10 @@ public class UserService {
         return user.getEventsList();
     }
 
-}
-
-
 
 
 }
+
 
 
 
