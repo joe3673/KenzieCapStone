@@ -16,8 +16,10 @@ public class User{
     private final List<String> notifications;
     private final String userType;
 
+    private final List<String> friends;
 
-    public User(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType) {
+
+    public User(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType, List<String> friends) {
         this.userID = userID;
         this.userName = userName;
         this.password = password;
@@ -27,6 +29,7 @@ public class User{
         this.lastName = lastName;
         this.notifications = notifications;
         this.userType = userType;
+        this.friends = friends;
     }
 
     public User(String userName, String password, String email, String firstName, String lastName, String userType) {
@@ -40,6 +43,7 @@ public class User{
 
         this.eventsList = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.friends = new ArrayList<>();
     }
 
     public String getUserID(){
@@ -76,5 +80,9 @@ public class User{
 
     public String getUserType(){
         return userType;
+    }
+
+    public List<String> getFriends(){
+        return friends;
     }
 }
