@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 
+import com.kenzie.appserver.exception.UserAlreadyExistsException;
 import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
@@ -66,6 +67,10 @@ public class UserService {
 
     public UserRecord addNewUser(String userName, String password, String email, String firstName, String lastName, String userType) {
         UserRecord ur = new UserRecord(userName, password, email, firstName, lastName, userType);
+        Optional<UserRecord> check = userRepository.findById(ur.getUserName());
+        if(check.isPresent()){
+            throw new UserAlreadyExistsException("User " + userName + " already exists.");
+        }
         userRepository.save(ur);
         return ur;
     }
@@ -107,6 +112,23 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public void addFriend(String userId, String friendId){
+        Optional<UserRecord> ur = userRepository.findById(userId);
+        Optional<UserRecord> fr = userRepository.findById(friendId);
+        if(ur.isPresent() && fr.isPresent()){
+            UserRecord user = ur.get();
+            UserRecord friend = fr.get();
+            if(user.getFriends().contains(friendId)){
+                return;
+            }
+            user.getFriends().add(friendId);
+            friend.getFriends().add(userId);
+            userRepository.save(user);
+            userRepository.save(friend);
+        }
+        throw new UserNotFoundException("User does not exist.");
+    }
+
     public void shareEventWithFriend(String userId, String eventId) {
         Optional<UserRecord> userRecord = userRepository.findById(userId);
         if(userRecord.isPresent()){
@@ -134,7 +156,6 @@ public class UserService {
         }
         return user.getEventsList();
     }
-
 
 }
 
