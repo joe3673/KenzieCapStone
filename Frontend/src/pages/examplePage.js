@@ -1,6 +1,6 @@
 import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
-import ExampleClient from "../api/eventClient";
+import ExampleClient from "../api/exampleClient";
 
 /**
  * Logic needed for the view playlist page of the website.
@@ -12,7 +12,7 @@ class ExamplePage extends BaseClass {
         this.bindClassMethods(['onGet', 'onCreate', 'renderExample'], this);
         this.dataStore = new DataStore();
     }
-lol
+
     /**
      * Once the page has loaded, set up the event handlers and fetch the concert list.
      */
@@ -26,14 +26,14 @@ lol
 
     // Render Methods --------------------------------------------------------------------------------------------------
 
-    async renderExample() { //this is for singular data not a list - I think I get it (week 18 should have example)
+    async renderExample() {
         let resultArea = document.getElementById("result-info");
 
         const example = this.dataStore.get("example");
 
-        if (example) { //basically a null check
+        if (example) {
             resultArea.innerHTML = `
-                <div>ID: ${example.id}</div>//can you remind me where the Json - ExampleResponse.java
+                <div>ID: ${example.id}</div>
                 <div>Name: ${example.name}</div>
             `
         } else {
@@ -59,15 +59,14 @@ lol
         }
     }
 
-    async onCreate(event) { //dataStore is the MVP here
+    async onCreate(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
-        this.dataStore.set("example", null);//making clean slate
+        this.dataStore.set("example", null);
 
-        let name = document.getElementById("create-name-field").value;//saving what user types
-        //let not constant
+        let name = document.getElementById("create-name-field").value;
+
         const createdExample = await this.client.createExample(name, this.errorHandler);
-       //make sure variables in order matching
         this.dataStore.set("example", createdExample);
 
         if (createdExample) {
