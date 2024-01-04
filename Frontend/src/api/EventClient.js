@@ -8,7 +8,7 @@ the event controller in the backend.
 
 export default class EventClient extends BaseClass {
 
-    constructor(props = {}){
+    constructor(props = {}) {
         super();
         const methodsToBind = ['clientLoaded'];
         this.bindClassMethods(methodsToBind, this);
@@ -22,23 +22,49 @@ export default class EventClient extends BaseClass {
      */
     clientLoaded(client) {
         this.client = client;
-        if (this.props.hasOwnProperty("onReady")){
+        if (this.props.hasOwnProperty("onReady")) {
             this.props.onReady();
         }
     }
 
-    /**
-     * Helper method to log the error and run any error functions.
-     * @param error The error received from the server.
-     * @param errorCallback (Optional) A function to execute if the call fails.
-     */
-    handleError(method, error, errorCallback) {
-        console.error(method + " failed - " + error);
-        if (error.response.data.message !== undefined) {
-            console.error(error.response.data.message);
-        }
-        if (errorCallback) {
-            errorCallback(method + " failed - " + error);
+    async getAllEvents() {
+        try {
+            const response = await this.client.get('/Event');
+            return response.data;
+        } catch (error) {
+            this.handleError("getAllEvents", error);
         }
     }
+
+    //I was just trying something here, ignore for now
+    async getSponsoredEvents() {
+
+        try {
+            const response = await this.client.get('/Event/sponsored');
+            return response.data;
+        } catch (error) {
+            this.handleError("getSponsoredEvents", error);
+        }
+    }
+
+    //I was just trying something here, ignore for now
+    async getAttendedEvents() {
+        try {
+            const response = await this.client.get('/Event/attended');
+            return response.data;
+        } catch (error) {
+            this.handleError("getAttendedEvents", error);
+        }
+    }
+
+    async deleteEvent(eventId, errorCallback) {
+        try {
+            const response = await this.client.delete(`/Event/${eventId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("deleteEvent", error, errorCallback);
+        }
+    }
+
+
 }

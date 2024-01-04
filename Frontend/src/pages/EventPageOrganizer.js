@@ -25,6 +25,17 @@ class EventCreationPage extends BaseClass {
         this.dataStore.addChangeListener(this.renderEvent);
     }
 
+    async deleteEvent(eventId) {
+        try {
+            await this.client.deleteEvent(eventId, this.errorHandler);
+            this.showMessage(`Deleted event with ID: ${eventId}`);
+            await this.renderEvents();
+        } catch (error) {
+            this.errorHandler("Error deleting event: " + error.message);
+        }
+    }
+
+
     async renderEvent() {
         let resultArea = document.getElementById("result-info");
 

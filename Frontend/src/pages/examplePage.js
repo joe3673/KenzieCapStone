@@ -1,6 +1,6 @@
 import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
-import ExampleClient from "../api/exampleClient";
+import ExampleClient from "../api/eventClient"; like this? oohh
 
 /**
  * Logic needed for the view playlist page of the website.
@@ -12,7 +12,7 @@ class ExamplePage extends BaseClass {
         this.bindClassMethods(['onGet', 'onCreate', 'renderExample'], this);
         this.dataStore = new DataStore();
     }
-
+lol
     /**
      * Once the page has loaded, set up the event handlers and fetch the concert list.
      */
@@ -26,14 +26,14 @@ class ExamplePage extends BaseClass {
 
     // Render Methods --------------------------------------------------------------------------------------------------
 
-    async renderExample() {
+    async renderExample() { //this is for singular data not a list - I think I get it (week 18 should have example)
         let resultArea = document.getElementById("result-info");
 
         const example = this.dataStore.get("example");
 
-        if (example) {
+        if (example) { //basically a null check
             resultArea.innerHTML = `
-                <div>ID: ${example.id}</div>
+                <div>ID: ${example.id}</div>//can you remind me where the Json - ExampleResponse.java
                 <div>Name: ${example.name}</div>
             `
         } else {
@@ -59,14 +59,15 @@ class ExamplePage extends BaseClass {
         }
     }
 
-    async onCreate(event) {
+    async onCreate(event) { //dataStore is the MVP here
         // Prevent the page from refreshing on form submit
         event.preventDefault();
-        this.dataStore.set("example", null);
+        this.dataStore.set("example", null);//making clean slate
 
-        let name = document.getElementById("create-name-field").value;
-
+        let name = document.getElementById("create-name-field").value;//saving what user types
+        //let not constant
         const createdExample = await this.client.createExample(name, this.errorHandler);
+       //make sure variables in order matching
         this.dataStore.set("example", createdExample);
 
         if (createdExample) {

@@ -26,6 +26,48 @@ export default class UserClient extends BaseClass {
         }
     }
 
+    //create user - post req
+    async createUser(user, errorCallback) {
+        try {
+            const response = await this.client.post('/User', user);
+            return response.data;
+        } catch (error) {
+            this.handleError("createUser", error, errorCallback);
+        }
+    }
+
+    //login - sends post req, might need to update?
+    async loginUser(username, password, errorCallback) {
+        try {
+            const response = await this.client.post('/User/login', { username, password });
+            return response.data;
+        } catch (error) {
+            this.handleError("loginUser", error, errorCallback);
+        }
+    }
+
+    //to edit their profile - sends a put req
+    async updateUser(id, updatedUser, errorCallback) {
+        try {
+            const response = await this.client.put(`/User/${id}`, updatedUser);
+            return response.data;
+        } catch (error) {
+            this.handleError("updateUser", error, errorCallback);
+        }
+    }
+
+
+
+//get user - sends get req
+  async getUser(id, errorCallback) {
+            try {
+                const response = await this.client.get(`/User/${id}`);
+                return response.data;
+            } catch (error) {
+                this.handleError("getUser", error, errorCallback)
+            }
+        }
+
 
     /**
      * Helper method to log the error and run any error functions.
