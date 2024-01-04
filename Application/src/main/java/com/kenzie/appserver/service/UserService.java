@@ -70,9 +70,6 @@ public class UserService {
         return ur;
     }
 
-    public boolean shareEventsWithFriends(String userId, String eventId) {
-        return true;
-    }
 
     public void addEventToList(String userId, String eventId){
         Optional<UserRecord> ur = userRepository.findById(userId);
@@ -111,14 +108,23 @@ public class UserService {
     }
 
     public void shareEventWithFriend(String userId, String eventId) {
-        UserRecord user = findUserById(userId);
+        Optional<UserRecord> userRecord = userRepository.findById(userId);
+        if(userRecord.isPresent()){
+            UserRecord user = userRecord.get();
+            user.getNotifications().add("Event " + eventId + " shared");
+            userRepository.save(user);
+            return;
+        }
+        throw new UserNotFoundException("User " + userId + " does not exist.");
 
-        List<String> friendsEvents = user.getEventsList();
-        friendsEvents.add(eventId);
+    }
 
-        user.setEventsList(friendsEvents);
-
-        userRepository.save(user);
+    public List<String> getNotifications(String userId){
+        Optional<UserRecord> userRecord = userRepository.findById(userId);
+        if(userRecord.isPresent()){
+            return userRecord.get().getNotifications();
+        }
+        throw new UserNotFoundException("User " + userId + " does not exist.");
     }
 
     public List<String> viewFriendsEvents(String userId) {
@@ -128,7 +134,6 @@ public class UserService {
         }
         return user.getEventsList();
     }
-
 
 
 }
