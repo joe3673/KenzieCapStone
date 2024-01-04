@@ -6,6 +6,7 @@ import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.exception.EventNotFoundException;
+import com.kenzie.appserver.exception.UserAlreadyExistsException;
 import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.EventService;
@@ -70,10 +71,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> addUser(@RequestBody UserCreateRequest userCreateRequest) {
-        UserRecord user = userService.addNewUser(userCreateRequest.getUserName(), userCreateRequest.getPassword(), userCreateRequest.getEmail(), userCreateRequest.getFirstName(), userCreateRequest.getLastName(), userCreateRequest.getUserType());
-
-        UserResponse userResponse = createUserResponseFromRecord(user);
-        return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
+        try {
+            UserRecord user = userService.addNewUser(userCreateRequest.getUserName(), userCreateRequest.getPassword(), userCreateRequest.getEmail(), userCreateRequest.getFirstName(), userCreateRequest.getLastName(), userCreateRequest.getUserType());
+            UserResponse userResponse = createUserResponseFromRecord(user);
+            return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
+        }
+        catch (UserAlreadyExistsException ex){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /*
@@ -101,7 +106,19 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable("userId") String userId) {
         userService.deleteUserById(userId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{userId}/FriendList")
+    public ResponseEntity<Void> addFriend(@PathVariable("userId") String userId, String friendId){
+        try {
+            userService.addFriend(userId, friendId);
+            return ResponseEntity.ok().build();
+        }
+        catch (UserNotFoundException ex){
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @PostMapping("/{userId}")
