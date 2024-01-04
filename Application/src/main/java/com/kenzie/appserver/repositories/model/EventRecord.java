@@ -2,11 +2,13 @@ package com.kenzie.appserver.repositories.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@DynamoDBTable(tableName = "Event")
 public class EventRecord{
 
     private final String eventID;

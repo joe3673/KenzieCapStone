@@ -1,16 +1,12 @@
 package com.kenzie.appserver.controller.model;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-public class EventResponse{
-
+public class EventResponse {
 
     @JsonProperty("name")
     private String name;
@@ -103,4 +99,5 @@ public class EventResponse{
         this.eventId = eventId;
     }
 }
+
 
