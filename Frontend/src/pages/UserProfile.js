@@ -11,18 +11,38 @@ import DataStore from "../util/DataStore";
  in the web browser cache.
  */
 
-class UserProfile extends BaseClass {
+import BaseClass from "../util/baseClass";
+import DataStore from "../util/DataStore";
 
+class UserProfile extends BaseClass {
     constructor() {
         super();
         this.bindClassMethods([], this);
         this.dataStore = new DataStore();
     }
 
-
     async mount() {
+        const editButton = document.getElementById('edit-profile-btn');
+        const saveButton = document.getElementById('save-changes-btn');
+
+        editButton.addEventListener('click', this.editProfile);
+        saveButton.addEventListener('click', this.saveChanges);
     }
 
+    editProfile() {
+        document.querySelectorAll('.user-info input, .user-info select').forEach(field => {
+            field.removeAttribute('disabled');
+        });
+        document.getElementById('save-changes-btn').style.display = 'block';
+    }
+
+    updateUser() {
+        document.querySelectorAll('.user-info input, .user-info select').forEach(field => {
+            field.setAttribute('disabled', 'disabled');
+        });
+
+        document.getElementById('save-changes-btn').style.display = 'none';
+    }
 }
 
 /**

@@ -14,6 +14,7 @@ export default class ExampleClient extends BaseClass {
     constructor(props = {}){
         super();
         const methodsToBind = ['clientLoaded', 'getExample', 'createExample'];
+        //
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
