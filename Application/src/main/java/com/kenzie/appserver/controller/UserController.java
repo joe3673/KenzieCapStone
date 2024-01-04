@@ -105,15 +105,14 @@ public class UserController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<Void> shareEventsWithFriends(@PathVariable("userId") String userId,
-                                                       @PathVariable("eventId") String eventId) {
-
-        boolean sharingSuccessful = userService.shareEventsWithFriends(userId, eventId);
-
-        if (sharingSuccessful) {
-            return ResponseEntity.noContent().build();
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
+                                                       @PathVariable("eventId") String eventId){
+        try{
+            userService.shareEventWithFriend(userId, eventId);
+            return ResponseEntity.ok().build();
+        }
+        catch(UserNotFoundException ex){
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -152,6 +151,7 @@ public class UserController {
         userResponse.setLastName(user.getLastName());
         userResponse.setNotifications(user.getNotifications());
         userResponse.setUserType(user.getUserType());
+        userResponse.setFriends(user.getFriends());
         return userResponse;
     }
   
@@ -164,6 +164,7 @@ public class UserController {
         userResponse.setLastName(user.getLastName());
         userResponse.setNotifications(user.getNotifications());
         userResponse.setUserType(user.getUserType());
+        userResponse.setFriends(user.getFriends());
         return userResponse;
     }
 
@@ -173,3 +174,4 @@ public class UserController {
         return eventResponse;
     }
 }
+
