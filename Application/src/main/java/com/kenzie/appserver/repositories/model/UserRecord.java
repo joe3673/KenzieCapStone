@@ -58,6 +58,10 @@ public class UserRecord{
     public String getUserID(){
         return userID;
     }
+    
+    public void setUserID(String userID){
+        this.userID = userID;
+    }
 
     @DynamoDBAttribute(attributeName = "Username")
     public String getUserName() {
