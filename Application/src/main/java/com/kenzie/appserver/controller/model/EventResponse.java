@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -19,12 +18,12 @@ public class EventResponse{
     private String location;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     @JsonProperty("startTime")
-    private LocalDateTime startTime;
+    private String startTime;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     @JsonProperty("endTime")
-    private LocalDateTime endTime;
+    private String endTime;
 
     @JsonProperty("peopleAttending")
     private List<String> peopleAttending;
@@ -48,11 +47,11 @@ public class EventResponse{
     }
 
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime(){
+    public String getEndTime(){
         return endTime;
     }
 
@@ -78,11 +77,11 @@ public class EventResponse{
         this.location = location;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
