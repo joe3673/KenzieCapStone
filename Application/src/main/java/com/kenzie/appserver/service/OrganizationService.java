@@ -29,14 +29,14 @@ public class OrganizationService {
     }
 
     @Scheduled(fixedRate = 3600000)
-    public void processExpiredEvents() {
+    public void processExpiredEvents(){
         LocalDateTime currentDateTime = LocalDateTime.now();
         Iterable<EventRecord> allEvents = eventRepository.findAll();
 
         Map<String, Organization> organizationsToUpdate = new HashMap<>();
 
         for (EventRecord record : allEvents) {
-            if (record.getEndTime().plusHours(24).isAfter(currentDateTime)) {
+            if (LocalDateTime.parse(record.getEndTime()).plusHours(24).isAfter(currentDateTime)) {
                 Organization organization = organizationsToUpdate
                         .computeIfAbsent(record.getEventSponsor(), k -> getOrganizationByName(k));
 
@@ -49,7 +49,7 @@ public class OrganizationService {
         }
 
         List<EventRecord> recordsToDelete = StreamSupport.stream(allEvents.spliterator(), false)
-                .filter(record -> record.getEndTime().plusHours(24).isAfter(currentDateTime))
+                .filter(record -> LocalDateTime.parse(record.getEndTime()).plusHours(24).isAfter(currentDateTime))
                 .collect(Collectors.toList());
 
         eventRepository.deleteAll(recordsToDelete);
