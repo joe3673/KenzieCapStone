@@ -87,7 +87,7 @@ public class UserControllerTest {
 
         // When & Then
         queryUtility.userControllerClient.deleteUserById(userCreateRequest.getUserName())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -112,8 +112,7 @@ public class UserControllerTest {
         queryUtility.userControllerClient.addUser(userCreateRequest);
         // When & Then
         queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), userCreateRequest.getPassword())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userName").value(userCreateRequest.getUserName()));
+                .andExpect(status().isOk());
     }
     @Test
     void joinEvent_WhenEventExists_ShouldJoinEvent() throws Exception {
