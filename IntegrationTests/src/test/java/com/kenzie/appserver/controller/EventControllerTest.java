@@ -39,18 +39,13 @@ import com.kenzie.appserver.controller.model.*;
 
 public class EventControllerTest{
 
-
+    @Autowired
     private MockMvc mockMvc;
 
 
 
-
-
-    private EventController eventController;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String baseUrl = "/Event";
-
 
 
     @Test
@@ -162,5 +157,4 @@ public class EventControllerTest{
 
 
 }
-
 
