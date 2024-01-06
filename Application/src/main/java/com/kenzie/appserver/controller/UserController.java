@@ -49,8 +49,8 @@ public class UserController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<UserResponse> loginUser(@RequestBody String userName, @RequestBody String password){
+    @PostMapping("/{userName}")
+    public ResponseEntity<UserResponse> loginUser(@PathVariable("userName") String userName, @RequestBody String password){
         if(userService.validateUser(userName, password)){
             return getUserById(userName);
         }
@@ -191,4 +191,3 @@ public class UserController {
         return eventResponse;
     }
 }
-
