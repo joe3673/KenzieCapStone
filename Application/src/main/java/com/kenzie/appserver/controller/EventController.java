@@ -19,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/Event")
 public class EventController{
-    private final EventService eventService;
+    private EventService eventService;
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
@@ -34,7 +34,7 @@ public class EventController{
         return ResponseEntity.ok(eventResponse);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         List<Event> events = eventService.findAllEvents();
         List<EventResponse> responses = new ArrayList<>();
@@ -81,8 +81,8 @@ public class EventController{
  */
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<Void> deleteEventById(@PathVariable("eventId") String eventId) {
-        eventService.findByEventId(eventId);
+    public ResponseEntity<Void> deleteEventById(@PathVariable("eventId") String eventId){
+        eventService.deleteEvent(eventId);
         return ResponseEntity.ok().build();
     }
 
