@@ -4,14 +4,123 @@ Has a link leading to friends page.
 
 Has another link leading back to index page.
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Profile</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+
+    <style>
+        body {
+            font-family: "Trirong", serif;
+            background-image: url("images/marble-banner.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .profile-container {
+            display: flex;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            flex: 0 0 calc(50% - 10px); /* 50% width with 10px spacing in between */
+            box-sizing: border-box;
+            padding-right: 10px; /* Spacing between the two boxes */
+        }
+
+        .friend-list {
+            overflow-y: auto; /* Enable vertical scrolling */
+            flex: 1; /* Take remaining width */
+            box-sizing: border-box;
+            padding-left: 10px; /* Spacing between the two boxes */
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        input, label, button, select {
+            margin-bottom: 10px;
+            width: 100%; /* Make inputs and selects fill the available width */
+        }
+
+        .navigation-links a {
+            color: #3CB371;
+            text-decoration: none;
+            margin-right: 15px; /* link spacing */
+        }
+
+        .navigation-links a:hover {
+            color: #2077b4;
+        }
+    </style>
+
 </head>
+
 <body>
+<header class="header" id="header">
+    <div class="site-title">
+        <h2 class="header-title">User Profile</h2>
+        <p class="sub-title">View and update your profile information.</p>
+    </div>
+    <div class="navigation-links">
+        <a href="HomePage.html">Home</a>
+        <a href="EventOrganizer.html">Create New Event</a>
+        <a href="FriendsPage.html">Friends</a>
+    </div>
+</header>
+
+<div class="profile-container">
+    <form class="user-info" id="user-profile-form">
+        <div class="form-field">
+            <label for="user-profile-firstName">First Name</label>
+            <input type="text" id="user-profile-firstName" disabled>
+        </div>
+        <div class="form-field">
+            <label for="user-profile-lastName">Last Name</label>
+            <input type="text" id="user-profile-lastName" disabled>
+        </div>
+        <div class="form-field">
+            <label for="user-profile-userName">Username</label>
+            <input type="text" id="user-profile-userName" disabled>
+        </div>
+        <div class="form-field">
+            <label for="user-profile-email">Email</label>
+            <input type="email" id="user-profile-email" disabled>
+        </div>
+        <div class="form-field">
+            <label for="user-profile-userType">User Type</label>
+            <select id="user-profile-userType" disabled>
+                <option value="regular">Regular User</option>
+                <option value="admin">Admin User</option>
+            </select>
+        </div>
+
+
+
+        <div class="form-field">
+            <button type="button" onclick="editProfile()">Edit Profile</button>
+        </div>
+
+        <div class="form-field" style="display: none;" id="save-changes-btn">
+            <button type="button" onclick="saveChanges()">Save Changes</button>
+        </div>
+    </form>
+
+
+</div>
+
 
 </body>
 </html>
+
+

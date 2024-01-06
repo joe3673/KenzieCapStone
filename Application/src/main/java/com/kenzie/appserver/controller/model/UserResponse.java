@@ -31,6 +31,9 @@ public class UserResponse{
     @JsonProperty("userType")
     private String userType;
 
+    @JsonProperty("friends")
+    private List<String> friends;
+
     public String getUserID() {
         return userID;
     }
@@ -95,6 +98,12 @@ public class UserResponse{
         this.userType = userType;
     }
 
+    public List<String> getFriends(){
+        return friends;
+    }
 
+    public void setFriends(List<String> friends){
+        this.friends = friends;
+    }
 }
 

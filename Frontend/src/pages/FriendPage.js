@@ -5,6 +5,8 @@ import UserClient from "../api/UserClient";
 /*
  FriendPage. Handles javascript for the
  friend page.
+
+ ***I'm going to be working on this next but need to push code, please check with me before assisting.***
  */
 
 class FriendPage extends BaseClass {

@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@DynamoDBTable(tableName = "User")
+
+@DynamoDBTable(tableName = "Users")
+
 public class UserRecord{
-    private final String userID;
+    private String userID;
     private String userName;
     private String password;
     private List<String> eventsList;
@@ -20,8 +22,10 @@ public class UserRecord{
     private List<String> notifications;
     private String userType;
 
+    private List<String> friends;
 
-    public UserRecord(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType) {
+
+    public UserRecord(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType, List<String> friends){
         this.userID = userID;
         this.userName = userName;
         this.password = password;
@@ -31,10 +35,11 @@ public class UserRecord{
         this.lastName = lastName;
         this.notifications = notifications;
         this.userType = userType;
+        this.friends = friends;
     }
 
     public UserRecord(String userName, String password, String email, String firstName, String lastName, String userType) {
-        this.userID = UUID.randomUUID().toString();
+        this.userID = userName;
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -44,11 +49,20 @@ public class UserRecord{
 
         this.eventsList = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.friends = new ArrayList<>();
     }
 
-    @DynamoDBHashKey(attributeName = "ID")
+    public UserRecord(){
+
+    }
+
+    @DynamoDBHashKey(attributeName = "id")
     public String getUserID(){
         return userID;
+    }
+    
+    public void setUserID(String userID){
+        this.userID = userID;
     }
 
     @DynamoDBAttribute(attributeName = "Username")
@@ -123,5 +137,13 @@ public class UserRecord{
         this.userType = userType;
     }
 
+    @DynamoDBAttribute(attributeName = "Friends")
+    public List<String> getFriends(){
+        return friends;
+    }
+
+    public void setFriends(List<String> friends){
+        this.friends = friends;
+    }
 
 }

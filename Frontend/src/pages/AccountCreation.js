@@ -20,7 +20,7 @@ class AccountCreation extends BaseClass {
         this.client = new UserClient();
     }
 
-    //Function to handle user submission
+    //Function for user submission
     submitUser() {
         const firstName = document.getElementById('create-user-firstName').value;
         const lastName = document.getElementById('create-user-lastName').value;
@@ -28,6 +28,23 @@ class AccountCreation extends BaseClass {
         const email = document.getElementById('create-user-email').value;
         const password = document.getElementById('create-user-password').value;
         const userType = document.getElementById('create-user-userType').value;
+
+        if (firstName && lastName && userName && email && password && userType) {
+                    //submituser data to the server using UserClient
+                    this.client.createUser({
+                        firstName,
+                        lastName,
+                        userName,
+                        email,
+                        password,
+                        userType,
+                    });
+                } else {
+                    console.error('All fields are required');
+
+                }
+            }
+        }
 
 
 
