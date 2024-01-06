@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @DynamoDBTable(tableName = "Users")
 public class UserRecord{
-    private final String userID;
+    private String userID;
     private String userName;
     private String password;
     private List<String> eventsList;
@@ -48,6 +48,10 @@ public class UserRecord{
         this.eventsList = new ArrayList<>();
         this.notifications = new ArrayList<>();
         this.friends = new ArrayList<>();
+    }
+
+    public UserRecord(){
+
     }
 
     @DynamoDBHashKey(attributeName = "id")
