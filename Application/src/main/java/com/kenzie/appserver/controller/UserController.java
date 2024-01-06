@@ -59,7 +59,7 @@ public class UserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserRecord> users = userService.getAllUsers();
         List<UserResponse> responses = new ArrayList<>();
@@ -109,8 +109,20 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{userId}/EventList")
+    public ResponseEntity<Void> joinEvent(@PathVariable("userId") String userId, @RequestBody String eventId){
+        try{
+            userService.addEventToList(userId, eventId);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception ex){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @PostMapping("/{userId}/FriendList")
-    public ResponseEntity<Void> addFriend(@PathVariable("userId") String userId, String friendId){
+    public ResponseEntity<Void> addFriend(@PathVariable("userId") String userId, @RequestBody String friendId){
         try {
             userService.addFriend(userId, friendId);
             return ResponseEntity.ok().build();
@@ -121,9 +133,9 @@ public class UserController {
 
     }
 
-    @PostMapping("/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                       @PathVariable("eventId") String eventId){
+                                                       @RequestBody String eventId){
         try{
             userService.shareEventWithFriend(userId, eventId);
             return ResponseEntity.ok().build();
@@ -133,6 +145,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/FriendList/Events")
     public ResponseEntity<List<EventResponse>> getEventsAttendedByFriends(@PathVariable("userId") String userId) {
         List<String> eventsAttendedByFriends = new ArrayList<>();
         try {
