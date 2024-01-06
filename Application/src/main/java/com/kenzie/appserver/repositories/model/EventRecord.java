@@ -5,19 +5,20 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @DynamoDBTable(tableName = "Events")
 public class EventRecord{
 
-    private final String eventID;
+    private String eventID;
     private String name;
     private String location;
 
-    private LocalDateTime startTime;
+    private String startTime;
+   
 
-    private LocalDateTime endTime;
+    private String endTime;
 
     private List<String> peopleAttending;
 
@@ -27,7 +28,7 @@ public class EventRecord{
 
 
 
-    public EventRecord(String eventID, String name, String location, LocalDateTime startTime, LocalDateTime endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor){
+    public EventRecord(String eventID, String name, String location, String startTime, String endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor){
         this.eventID = eventID;
         this.name = name;
         this.location = location;
@@ -36,6 +37,10 @@ public class EventRecord{
         this.peopleAttending = peopleAttending;
         this.peopleAttended = peopleAttended;
         this.eventSponsor = eventSponsor;
+    }
+
+    public EventRecord(){
+
     }
 
     @DynamoDBHashKey(attributeName = "id")
@@ -62,20 +67,20 @@ public class EventRecord{
     }
 
     @DynamoDBAttribute(attributeName = "Start_Time")
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
     @DynamoDBAttribute(attributeName = "End_Time")
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
