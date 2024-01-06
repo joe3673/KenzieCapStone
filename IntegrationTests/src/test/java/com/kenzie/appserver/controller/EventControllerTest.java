@@ -6,6 +6,7 @@ import com.kenzie.appserver.controller.model.EventCreateRequest;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.model.Event;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,10 +43,17 @@ public class EventControllerTest{
     @Autowired
     private MockMvc mockMvc;
 
-
+    private QueryUtility queryUtility;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final String baseUrl = "/Event";
+
+
+    @BeforeAll
+    public void setup(){
+        queryUtility = new QueryUtility(mockMvc);
+    }
 
 
     @Test
@@ -57,10 +65,10 @@ public class EventControllerTest{
         request.setName("f");
         request.setEndTime(LocalDateTime.now().plusDays(3));
         request.setStartTime(LocalDateTime.now());
-        ResultActions temp = mockMvc.perform(post(baseUrl).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsString(request)));
+        ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
         EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
         // When
-        ResultActions result = mockMvc.perform(delete(baseUrl + "/" + eventResponse.getEventId()).accept(APPLICATION_JSON));
+        ResultActions result = queryUtility.eventControllerClient.deleteEventById(eventResponse.getEventId());
 
         // Then
         result.andExpect(status().isOk());
@@ -76,10 +84,8 @@ public class EventControllerTest{
 
 
         // Then
-        mockMvc.perform(get(baseUrl + "/all").accept(APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-
+        queryUtility.eventControllerClient.getAllEvents()
+                        .andExpect(status().isOk());
     }
 
     @Test
@@ -97,13 +103,8 @@ public class EventControllerTest{
 
 
         // Then
-        mockMvc.perform(post(baseUrl)
-                        .accept(APPLICATION_JSON)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
-
-
+        queryUtility.eventControllerClient.addNewEvent(request)
+                        .andExpect(status().isCreated());
 
     }
 
