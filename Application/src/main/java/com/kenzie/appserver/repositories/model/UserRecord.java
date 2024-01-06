@@ -2,11 +2,13 @@ package com.kenzie.appserver.repositories.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@DynamoDBTable(tableName = "Users")
 public class UserRecord{
     private final String userID;
     private String userName;
@@ -135,4 +137,3 @@ public class UserRecord{
     }
 
 }
-
