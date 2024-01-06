@@ -4,16 +4,26 @@ import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
+
+import com.kenzie.appserver.repositories.model.OrganizationRecord;
+import com.kenzie.appserver.service.model.Organization;
+import org.springframework.scheduling.annotation.Scheduled;
+
 import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import java.util.Optional;
+
 
 @Service
 public class EventService {
@@ -27,7 +37,11 @@ public class EventService {
         this.userRepository = userRepository;
     }
 
-    public List<Event> findAllEvents() {
+
+
+
+
+        public List<Event> findAllEvents() {
         List<Event> events = new ArrayList<>();
 
         Iterable<EventRecord> eventRecordIterable = eventRepository.findAll();

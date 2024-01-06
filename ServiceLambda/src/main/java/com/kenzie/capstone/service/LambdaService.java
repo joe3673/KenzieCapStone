@@ -1,8 +1,11 @@
 package com.kenzie.capstone.service;
 
+import com.kenzie.capstone.service.dao.NotificationDao;
 import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.dao.ExampleDao;
 import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.model.NotificationData;
+import com.kenzie.capstone.service.model.NotificationRecord;
 
 import javax.inject.Inject;
 
@@ -11,24 +14,24 @@ import java.util.UUID;
 
 public class LambdaService {
 
-    private ExampleDao exampleDao;
+    private NotificationDao notificationDao;
 
     @Inject
-    public LambdaService(ExampleDao exampleDao) {
-        this.exampleDao = exampleDao;
+    public LambdaService(NotificationDao notificationDao) {
+        this.notificationDao = notificationDao;
     }
 
-    public ExampleData getExampleData(String id) {
-        List<ExampleRecord> records = exampleDao.getExampleData(id);
+    public NotificationData getNotificationData(String id) {
+        List<NotificationRecord> records = notificationDao.getNotificationData(id);
         if (records.size() > 0) {
-            return new ExampleData(records.get(0).getId(), records.get(0).getData());
+            return new NotificationData(records.get(0).getId(), records.get(0).getData());
         }
         return null;
     }
 
-    public ExampleData setExampleData(String data) {
+    public NotificationData setNotificationData(String data) {
         String id = UUID.randomUUID().toString();
-        ExampleRecord record = exampleDao.setExampleData(id, data);
-        return new ExampleData(id, data);
+        NotificationRecord record = notificationDao.setNotificationData(id, data);
+        return new NotificationData(id, data);
     }
 }

@@ -2,7 +2,6 @@ package com.kenzie.capstone.service.lambda;
 
 import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
-import com.kenzie.capstone.service.model.ExampleData;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -11,13 +10,14 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kenzie.capstone.service.model.NotificationData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SetExampleData implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class GetNotificationData implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static final Logger log = LogManager.getLogger();
 
@@ -36,17 +36,17 @@ public class SetExampleData implements RequestHandler<APIGatewayProxyRequestEven
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
 
-        String data = input.getBody();
+        String id = input.getPathParameters().get("id");
 
-        if (data == null || data.length() == 0) {
+        if (id == null || id.length() == 0) {
             return response
                     .withStatusCode(400)
-                    .withBody("data is invalid");
+                    .withBody("Id is invalid");
         }
 
         try {
-            ExampleData exampleData = lambdaService.setExampleData(data);
-            String output = gson.toJson(exampleData);
+            NotificationData notificationData = lambdaService.getNotificationData(id);
+            String output = gson.toJson(notificationData);
 
             return response
                     .withStatusCode(200)

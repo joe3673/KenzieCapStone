@@ -1,14 +1,13 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.repositories.model.ExampleRecord;
-import com.kenzie.appserver.repositories.ExampleRepository;
+
 import com.kenzie.appserver.service.model.Example;
 
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ExampleData;
 import org.springframework.stereotype.Service;
 
-@Service
+/*@Service
 public class ExampleService {
     private ExampleRepository exampleRepository;
     private LambdaServiceClient lambdaServiceClient;
@@ -44,4 +43,4 @@ public class ExampleService {
         Example example = new Example(dataFromLambda.getId(), name);
         return example;
     }
-}
+}*/

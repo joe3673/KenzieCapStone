@@ -102,4 +102,3 @@ public class EventResponse{
         this.eventId = eventId;
     }
 }
-

@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 @DynamoDBTable(tableName = "Users")
+
 public class UserRecord{
     private String userID;
     private String userName;
