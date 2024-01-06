@@ -32,13 +32,54 @@ public class QueryUtility{
 
     }
 
+    public class UserControllerClient{
+        public ResultActions getUserById(String userId) throws Exception{
+            return mvc.perform(get("/User/{userId}", userId).accept(MediaType.APPLICATION_JSON));
+        }
+
+        public ResultActions getAllUsers() throws Exception{
+            return mvc.perform(get("/User/all").accept(MediaType.APPLICATION_JSON));
+        }
+        public ResultActions loginUser(String userName, String password) throws Exception {
+            return mvc.perform(post("/User/{userName}", userName).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(password));
+        }
+
+        public ResultActions addUser(UserCreateRequest userCreateRequest) throws Exception {
+            return mvc.perform(post("/User/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(userCreateRequest)));
+        }
+
+        public ResultActions joinEvent(String userId, String eventId) throws Exception {
+            return mvc.perform(post("/User/{userId}/EventList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(eventId));
+        }
+
+        public ResultActions addFriend(String userId, String friendId) throws Exception {
+            return mvc.perform(post("/User/{userId}/FriendList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(friendId));
+        }
+
+        public ResultActions shareEventsWithFriend(String userId, String eventId) throws Exception {
+            return mvc.perform(put("/User/{userId}", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(eventId));
+        }
+
+        public ResultActions getEventsAttendedByFriends(String userId) throws Exception{
+            return mvc.perform(get("/User/{userId}/FriendList/Events", userId).accept(MediaType.APPLICATION_JSON));
+        }
+
+        public ResultActions deleteUserById(String userId) throws Exception{
+            return mvc.perform(delete("/User/{userId}", userId).accept(MediaType.APPLICATION_JSON));
+        }
+
+    }
+
     public EventControllerClient eventControllerClient;
+
+    public UserControllerClient userControllerClient;
     private final MockMvc mvc;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public QueryUtility(MockMvc mvc) {
         this.mvc = mvc;
         this.eventControllerClient = new EventControllerClient();
+        this.userControllerClient = new UserControllerClient();
     }
 
 
