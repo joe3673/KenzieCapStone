@@ -1,12 +1,14 @@
 package com.kenzie.appserver.controller;
 
 
+import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.controller.model.EventCreateRequest;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.model.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,12 +34,12 @@ import com.kenzie.appserver.controller.model.*;
 
 
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@IntegrationTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 public class EventControllerTest{
 
-    @Autowired
+
     private MockMvc mockMvc;
 
 
@@ -160,4 +162,5 @@ public class EventControllerTest{
 
 
 }
+
 
