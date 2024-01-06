@@ -16,7 +16,7 @@ public class EventRecord{
     private String location;
 
     private String startTime;
-   
+
 
     private String endTime;
 
@@ -46,6 +46,10 @@ public class EventRecord{
     @DynamoDBHashKey(attributeName = "id")
     public String getEventID() {
         return eventID;
+    }
+    
+    public void setEventID(String eventID){
+        this.eventID = eventID;
     }
 
     @DynamoDBAttribute(attributeName = "Name")
