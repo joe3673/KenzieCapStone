@@ -1,14 +1,14 @@
 package com.kenzie.appserver.service.model;
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 public class Event{
    private final String eventID;
    private final String name;
    private final String location;
-   private final LocalDateTime startTime;
+   private final String startTime;
 
-   private final LocalDateTime endTime;
+   private final String endTime;
 
    private final List<String> peopleAttending;
 
@@ -17,7 +17,7 @@ public class Event{
    private final String eventSponsor;
 
    
-    public Event(String eventID, String name, String location, LocalDateTime startTime, LocalDateTime endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor){
+    public Event(String eventID, String name, String location, String startTime, String endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor){
         this.eventID = eventID;
         this.name = name;
         this.location = location;
@@ -40,11 +40,11 @@ public class Event{
         return location;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
