@@ -15,8 +15,8 @@ public class QueryUtility{
 
 
     public class EventControllerClient{
-        public ResultActions getEventById(String id) throws Exception{
-            return mvc.perform(get("/Event/{eventId}", id).accept(MediaType.APPLICATION_JSON));
+        public ResultActions getEventById(String eventId) throws Exception{
+            return mvc.perform(get("/Event/{eventId}", eventId).accept(MediaType.APPLICATION_JSON));
         }
 
         public ResultActions getAllEvents() throws Exception{
@@ -25,8 +25,8 @@ public class QueryUtility{
         public ResultActions addNewEvent(EventCreateRequest eventCreateRequest) throws Exception {
             return mvc.perform(post("/Event/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(eventCreateRequest)));
         }
-        public ResultActions deleteEventById(String id) throws Exception{
-            return mvc.perform(delete("/Event/{eventId}", id).accept(MediaType.APPLICATION_JSON));
+        public ResultActions deleteEventById(String eventId) throws Exception{
+            return mvc.perform(delete("/Event/{eventId}", eventId).accept(MediaType.APPLICATION_JSON));
         }
 
 
