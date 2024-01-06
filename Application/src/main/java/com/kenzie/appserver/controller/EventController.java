@@ -51,8 +51,6 @@ public class EventController{
                 eventCreateRequest.getLocation(),
                 eventCreateRequest.getStartTime(),
                 eventCreateRequest.getEndTime(),
-                eventCreateRequest.getPeopleAttending(),
-                eventCreateRequest.getPeopleAttended(),
                 eventCreateRequest.getEventSponsor());
         eventService.addNewEvent(event);
 
