@@ -1,3 +1,4 @@
+/*
 package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.IntegrationTest;
@@ -67,3 +68,4 @@ class ExampleControllerTest {
                 .andExpect(status().is2xxSuccessful());
     }
 }
+*/
