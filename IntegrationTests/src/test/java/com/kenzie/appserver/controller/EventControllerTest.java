@@ -63,8 +63,8 @@ public class EventControllerTest{
         request.setEventSponsor("f");
         request.setLocation("f");
         request.setName("f");
-        request.setEndTime(LocalDateTime.now().plusDays(3));
-        request.setStartTime(LocalDateTime.now());
+        request.setEndTime(LocalDateTime.now().plusDays(3).toString());
+        request.setStartTime(LocalDateTime.now().toString());
         ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
         EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
         // When
@@ -95,8 +95,8 @@ public class EventControllerTest{
         request.setEventSponsor("f");
         request.setLocation("f");
         request.setName("f");
-        request.setEndTime(LocalDateTime.now().plusDays(3));
-        request.setStartTime(LocalDateTime.now());
+        request.setEndTime(LocalDateTime.now().plusDays(3).toString());
+        request.setStartTime(LocalDateTime.now().toString());
 
 
         // When
