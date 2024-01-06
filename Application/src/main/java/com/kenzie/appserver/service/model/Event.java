@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event{
@@ -28,6 +29,16 @@ public class Event{
         this.eventSponsor = eventSponsor;
     }
 
+    public Event(String eventID, String name, String location, String startTime, String endTime, String eventSponsor){
+        this.eventID = eventID;
+        this.name = name;
+        this.location = location;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.peopleAttending = new ArrayList<>();
+        this.peopleAttended = new ArrayList<>();
+        this.eventSponsor = eventSponsor;
+    }
     public String getEventID() {
         return eventID;
     }
@@ -62,4 +73,5 @@ public class Event{
 
 
 }
+
 
