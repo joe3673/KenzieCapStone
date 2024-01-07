@@ -24,9 +24,9 @@ public class EventServiceTest {
     private EventRepository eventRepository;
     @Mock
     private UserRepository userRepository;
-    
+
     @Mock
-    private CacheDAO cacheDAO;
+    private CacheClient cacheClient;
     @InjectMocks
     private EventService eventService;
 
