@@ -108,6 +108,34 @@ public class EventControllerTest{
 
     }
 
+    @Test
+    void getEventById_EventExists() throws Exception {
+        // Given
+        EventCreateRequest request = new EventCreateRequest();
+        request.setEventSponsor("f");
+        request.setLocation("f");
+        request.setName("f");
+        request.setEndTime(LocalDateTime.now().plusDays(3).toString());
+        request.setStartTime(LocalDateTime.now().toString());
+        ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
+        EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
+
+        // When & Then
+        queryUtility.eventControllerClient.getEventById(eventResponse.getEventId())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getEventById_EventDoesNotExist() throws Exception {
+        // Given
+        String eventId = "nonExistingEventId";
+
+        // When & Then
+        queryUtility.eventControllerClient.getEventById(eventId)
+                .andExpect(status().isNotFound());
+    }
+
+
 
 
     //Still need get event and get event with invalid id.
@@ -155,7 +183,6 @@ public class EventControllerTest{
 
 
      */
-
 
 }
 
