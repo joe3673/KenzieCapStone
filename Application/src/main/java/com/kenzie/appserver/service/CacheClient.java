@@ -8,78 +8,80 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 public class CacheClient {
-    private final JedisPool pool;
+
 
 
     public CacheClient() {
-    pool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 20000);
+
+    }
+
+    public Jedis getPool(){
+        String redisUrl = System.getenv("JEDIS_URL");
+        if (redisUrl != null && redisUrl.length() > 0) {
+            // Connect to AWS
+            System.out.println("Providing redis " + redisUrl);
+            return new Jedis(redisUrl, 6379, 20000);
+        } else if ("true".equals(System.getenv("AWS_SAM_LOCAL"))) {
+            // Connect to local Docker redis
+            JedisPool pool = new JedisPool(new JedisPoolConfig(), "redis-stack", 6379, 20000);
+            try {
+                return pool.getResource();
+            } catch (Exception e) {
+                throw new IllegalStateException("Could not connect to the local redis container in docker.  " +
+                        "Make sure that it is running and that you have configured the SAM CLI - Docker Network " +
+                        "property to contain kenzie-local inside of your run configuration.");
+            }
+        } else {
+            // Run Locally
+            System.out.println("Providing local redis");
+            return new JedisPool(new JedisPoolConfig(), "localhost", 6379, 20000).getResource();
+        }
     }
 
 
+    public void setValue(String key, int seconds, String value) {
+        // Check for non-null key
+        // Set the value in the cache
+        if(checkNonNullKey(key)){
+            Jedis cache = getPool();
+            cache.setex(key, seconds, value);
+            cache.close();
+        }
+    }
 
+    public Optional<String> getValue(String key) {
+        // Check for non-null key
+        // Retrieves the Optional values from the cache
+        if(checkNonNullKey(key)){
+            Jedis cache = getPool();
+            Optional<String> value = Optional.of(cache.get(key));
+            cache.close();
+            return value;
+        }
+        else{
+            return Optional.empty();
+        }
 
-    private void checkForNullKey(String key){
+    }
+
+    public void invalidate(String key) {
+        // Check for non-null key
+        // Delete the key
+        if(checkNonNullKey(key)){
+            Jedis cache = getPool();
+            cache.del(key);
+            cache.close();
+        }
+
+    }
+
+    private boolean checkNonNullKey(String key) {
+        // Ensure the key isn't null
+        // What should you do if the key *is* null?
         if(key == null){
-            throw new IllegalArgumentException();
-        }
-    }
-
-    /**
-     * Method that sets a key-value pair in the cache.
-     *
-     * PARTICIPANTS: Implement this method.
-     *
-     * @param key     String used to identify an item in the cache
-     * @param seconds The number of seconds during which the item is available
-     * @param value   String representing the value set in the cache
-     */
-    public void setValue(String key, long seconds, String value){
-        checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()){
-            jedis.setex(key, seconds, value);
-
-        }
-    }
-
-    /**
-     * Method that retrieves a value from the cache.
-     *
-     * PARTICIPANTS: Replace return null with your implementation of this method.
-     *
-     * @param key String used to identify the item being retrieved
-     * @return String representing the value stored in the cache or an empty Optional in the case of a cache miss.
-     */
-    public Optional<String> getValue(String key){
-        checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()){
-            String value = jedis.get(key);
-
-            if(value == null){
-                return Optional.empty();
-            }
-            else{
-                return Optional.of(value);
-            }
-        }
-    }
-
-    /**
-     * Method to invalidate an item in the cache. Checks whether the requested key exists before invalidating.
-     *
-     * PARTICIPANTS: Implement this method.
-     *
-     * @param key String representing the key to be deleted from the cache
-     * @return true on invalidation, false if key does not exist in cache
-     */
-    public boolean invalidate(String key) {
-        checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()) {
-            if (jedis.get(key) != null) {
-                jedis.del(key);
-
-                return true;
-            }
             return false;
         }
+        return true;
     }
+
 }
