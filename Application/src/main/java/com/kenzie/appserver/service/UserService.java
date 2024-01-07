@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 
+import com.kenzie.appserver.exception.EventNotFoundException;
 import com.kenzie.appserver.exception.UserAlreadyExistsException;
 import com.kenzie.appserver.exception.UserNotFoundException;
 import com.kenzie.appserver.repositories.EventRepository;
@@ -82,14 +83,22 @@ public class UserService {
         Optional<UserRecord> ur = userRepository.findById(userId);
         Optional<EventRecord> er = eventRepository.findById(eventId);
         if(ur.isEmpty() || er.isEmpty()){
-            return;
+            if(ur.isEmpty()){
+                throw new UserNotFoundException("User " + userId +" does not exist.");
+            }
+            else{
+                throw new EventNotFoundException("Event " + eventId + " does not exist.");
+            }
         }
         UserRecord userRecord = ur.get();
+        EventRecord eventRecord = er.get();
         if(userRecord.getEventsList().contains(eventId)){
             return;
         }
         userRecord.getEventsList().add(eventId);
+        eventRecord.getPeopleAttending().add(userId);
         userRepository.save(userRecord);
+        eventRepository.save(eventRecord);
     }
 
     public void updateUser(User user) {
