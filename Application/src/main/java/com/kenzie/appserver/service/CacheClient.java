@@ -14,7 +14,7 @@ public class CacheClient {
 
 
     public CacheClient() {
-        this.pool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 20000);
+        this.pool = new JedisPool(new JedisPoolConfig(), System.getenv("JEDIS_URL"), 6379, 20000);
     }
 
 
