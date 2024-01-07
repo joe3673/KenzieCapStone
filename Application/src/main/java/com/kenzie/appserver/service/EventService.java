@@ -1,6 +1,8 @@
 package com.kenzie.appserver.service;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -24,21 +26,41 @@ public class EventService {
 
     private UserRepository userRepository;
 
-    @Autowired
-    private CacheDAO cacheDAO;
+    Gson gson = new Gson();    
+    private CacheClient cacheClient;
 
 
-    public EventService(EventRepository eventRepository, UserRepository userRepository, CacheDAO cacheDAO){
+    public EventService(EventRepository eventRepository, UserRepository userRepository, CacheClient cacheClient){
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
-        this.cacheDAO = cacheDAO;
+        this.cacheClient = cacheClient;
+    }
+
+
+    private EventRecord fromJson(String json) {
+        return gson.fromJson(json, new TypeToken<EventRecord>() { }.getType());
+    }
+
+    public void addRecord(EventRecord eventRecord){
+        cacheClient.setValue(eventRecord.getEventID(), 10000, gson.toJson(eventRecord));
+    }
+
+    public EventRecord getRecord(String id){
+        Optional<String> temp = cacheClient.getValue(id);
+        if(temp.isPresent()){
+            return fromJson(temp.get());
+        }
+        return null;
+    }
+
+    public void deleteRecord(String id){
+        cacheClient.invalidate(id);
     }
 
 
 
 
-
-        public List<Event> findAllEvents() {
+    public List<Event> findAllEvents() {
         List<Event> events = new ArrayList<>();
 
         Iterable<EventRecord> eventRecordIterable = eventRepository.findAll();
@@ -57,12 +79,12 @@ public class EventService {
     }
 
     public Event findByEventId(String eventId){
-        EventRecord eventRecord = cacheDAO.getRecord(eventId);
+        EventRecord eventRecord = getRecord(eventId);
         if(eventRecord == null){
             Optional<EventRecord> record = eventRepository.findById(eventId);
             if(record.isPresent()){
                 eventRecord = record.get();
-                cacheDAO.addRecord(eventRecord);
+                addRecord(eventRecord);
                 return new Event(eventRecord.getEventID(), eventRecord.getName(), eventRecord.getLocation(), eventRecord.getStartTime(), eventRecord.getEndTime(), eventRecord.getPeopleAttending(), eventRecord.getPeopleAttended(), eventRecord.getEventSponsor());
             }
             return null;
@@ -115,7 +137,7 @@ public class EventService {
                     userRepository.save(userRecord);
                 }
             }
-            cacheDAO.deleteRecord(eventId);
+            deleteRecord(eventId);
             eventRepository.deleteById(eventId);
         }
     }
