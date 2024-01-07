@@ -10,6 +10,8 @@ import javax.inject.Inject;
 
 public class CacheClient {
     private final JedisPool pool;
+    
+    private Jedis jedi = new Jedis();
 
 
 
@@ -37,10 +39,8 @@ public class CacheClient {
      */
     public void setValue(String key, int seconds, String value){
         checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()){
-            jedis.setex(key, seconds, value);
-            pool.close();
-        }
+        jedi.setex(key, seconds, value);
+
     }
 
     /**
@@ -53,16 +53,14 @@ public class CacheClient {
      */
     public Optional<String> getValue(String key){
         checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()){
-            String value = jedis.get(key);
-            pool.close();
+            String value = jedi.get(key);
             if(value == null){
                 return Optional.empty();
             }
             else{
                 return Optional.of(value);
             }
-        }
+        
     }
 
     /**
@@ -75,13 +73,13 @@ public class CacheClient {
      */
     public boolean invalidate(String key) {
         checkForNullKey(key);
-        try(Jedis jedis = pool.getResource()) {
-            if (jedis.get(key) != null) {
-                jedis.del(key);
+
+            if (jedi.get(key) != null) {
+                jedi.del(key);
                 pool.close();
                 return true;
             }
             return false;
-        }
+        
     }
 }
