@@ -136,6 +136,7 @@ public class UserService {
             friend.getFriends().add(userId);
             userRepository.save(user);
             userRepository.save(friend);
+            return;
         }
         throw new UserNotFoundException("User does not exist.");
     }
@@ -152,13 +153,6 @@ public class UserService {
 
     }
 
-    public List<String> getNotifications(String userId){
-        Optional<UserRecord> userRecord = userRepository.findById(userId);
-        if(userRecord.isPresent()){
-            return userRecord.get().getNotifications();
-        }
-        throw new UserNotFoundException("User " + userId + " does not exist.");
-    }
 
     public List<String> viewFriendsEvents(String userId) {
         UserRecord user = findUserById(userId);
