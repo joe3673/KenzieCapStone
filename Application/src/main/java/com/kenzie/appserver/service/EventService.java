@@ -31,10 +31,13 @@ public class EventService {
 
     private UserRepository userRepository;
 
+    private CacheDAO cacheDAO;
 
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+
+    public EventService(EventRepository eventRepository, UserRepository userRepository, CacheDAO cacheDAO){
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.cacheDAO = cacheDAO;
     }
 
 
@@ -59,18 +62,20 @@ public class EventService {
         return events;
     }
 
-    public Event findByEventId(String eventId) {
-        return eventRepository.findById(eventId)
-                .map(event -> new Event(
-                        event.getEventID(),
-                        event.getName(),
-                        event.getLocation(),
-                        event.getStartTime(),
-                        event.getEndTime(),
-                        event.getPeopleAttending(),
-                        event.getPeopleAttended(),
-                        event.getEventSponsor()))
-                .orElse(null);
+    public Event findByEventId(String eventId){
+        EventRecord eventRecord = cacheDAO.getRecord(eventId);
+        if(eventRecord == null){
+            Optional<EventRecord> record = eventRepository.findById(eventId);
+            if(record.isPresent()){
+                eventRecord = record.get();
+                cacheDAO.addRecord(eventRecord);
+                return new Event(eventRecord.getEventID(), eventRecord.getName(), eventRecord.getLocation(), eventRecord.getStartTime(), eventRecord.getEndTime(), eventRecord.getPeopleAttending(), eventRecord.getPeopleAttended(), eventRecord.getEventSponsor());
+            }
+            return null;
+
+        }
+        return new Event(eventRecord.getEventID(), eventRecord.getName(), eventRecord.getLocation(), eventRecord.getStartTime(), eventRecord.getEndTime(), eventRecord.getPeopleAttending(), eventRecord.getPeopleAttended(), eventRecord.getEventSponsor());
+
     }
 
     public Event addNewEvent(Event event) {
@@ -116,6 +121,7 @@ public class EventService {
                     userRepository.save(userRecord);
                 }
             }
+            cacheDAO.deleteRecord(eventId);
             eventRepository.deleteById(eventId);
         }
     }
