@@ -114,6 +114,29 @@ public class UserControllerTest {
         queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), userCreateRequest.getPassword())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void loginUser_PasswordIsIncorrect_ShouldReturnBadRequest() throws Exception{
+        // Given
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+        // When & Then
+        queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), "m")
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void loginUser_UserDoesNotExist_ShouldReturnBadRequest() throws Exception{
+        // Given
+
+        // When & Then
+        queryUtility.userControllerClient.loginUser(mockNeat.users().get(), "m")
+                .andExpect(status().isBadRequest());
+    }
+
+
     @Test
     void joinEvent_WhenEventExists_ShouldJoinEvent() throws Exception {
         // Given
@@ -133,6 +156,38 @@ public class UserControllerTest {
 
         // When & Then
         queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), eventResponse.getEventId())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void joinEvent_WhenEventDoesNotExist_ShouldReturnBadRequest() throws Exception {
+        // Given
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+
+
+
+        // When & Then
+        queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), mockNeat.cities().toString())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void joinEvent_WhenUserDoesNotExist_ShouldReturnBadRequest() throws Exception {
+        // Given
+        EventCreateRequest request = new EventCreateRequest();
+        request.setEventSponsor("f");
+        request.setLocation("f");
+        request.setName("f");
+        request.setEndTime(LocalDateTime.now().plusDays(3).toString());
+        request.setStartTime(LocalDateTime.now().toString());
+        ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
+        EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
+
+        // When & Then
+        queryUtility.userControllerClient.joinEvent(mockNeat.users().get(), eventResponse.getEventId())
                 .andExpect(status().isOk());
     }
 
@@ -177,6 +232,42 @@ public class UserControllerTest {
     }
 
     @Test
+    void shareEventsWithFriend_FriendDoesNotExist_ShouldReturnNotFound() throws Exception {
+        // GIVEN
+
+        EventCreateRequest request = new EventCreateRequest();
+        request.setEventSponsor("f");
+        request.setLocation("f");
+        request.setName("f");
+        request.setEndTime(LocalDateTime.now().plusDays(3).toString());
+        request.setStartTime(LocalDateTime.now().toString());
+        ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
+        EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
+
+        // WHEN
+
+        // THEN
+        queryUtility.userControllerClient.shareEventsWithFriend(mockNeat.users().get(), eventResponse.getEventId())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shareEventsWithFriend_EventDoesNotExist_ShouldReturnNotFound() throws Exception {
+        // GIVEN
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+
+        // WHEN
+
+        // THEN
+        queryUtility.userControllerClient.shareEventsWithFriend(userCreateRequest.getUserName(), mockNeat.cities().toString())
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
     void getEventsAttendedByFriends_ShouldReturnEvents() throws Exception {
         // GIVEN
         UserCreateRequest userCreateRequest = new UserCreateRequest();
@@ -191,6 +282,84 @@ public class UserControllerTest {
         queryUtility.userControllerClient.getEventsAttendedByFriends(userCreateRequest.getUserName())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void getEventsAttendedByFriends_FriendNotFound_ShouldReturnBadRequest() throws Exception {
+        // GIVEN
+
+        // WHEN
+
+
+        // THEN
+        queryUtility.userControllerClient.getEventsAttendedByFriends(mockNeat.users().get())
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void addFriend_ShouldAddFriendSuccessfully() throws Exception {
+        // Given
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+
+        UserCreateRequest userCreateRequest2 = new UserCreateRequest();
+        userCreateRequest2.setPassword("f");
+        userCreateRequest2.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest2);
+
+        // When & Then
+        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), userCreateRequest2.getUserName())
+                .andExpect(status().isOk());
+    }
+    @Test
+    void addFriend_WhenFriendNotFound_ShouldReturnNotFound() throws Exception {
+        // Given
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+
+
+        // When & Then
+        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), mockNeat.users().get())
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void addFriend_WhenUserNotFound_ShouldReturnNotFound() throws Exception {
+        // Given
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
+        queryUtility.userControllerClient.addUser(userCreateRequest);
+
+
+        // When & Then
+        queryUtility.userControllerClient.addFriend(mockNeat.users().get(), userCreateRequest.getUserName())
+                .andExpect(status().isNotFound());
+    }
+
+
+    /*
+    @Test
+    void updateUser_ShouldUpdateUserSuccessfully() throws Exception {
+        // Given
+        UserUpdateRequest request = new UserUpdateRequest("userId", "userName", "password", "email@example.com", "First", "Last", "type", new ArrayList<>(), new ArrayList<>());
+        UserRecord updatedUser = new UserRecord();
+        when(userService.updateUser(any(User.class))).thenReturn(updatedUser);
+
+        // When & Then
+        mockMvc.perform(put("/User")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+    }
+
+
+     */
 
 
 }
