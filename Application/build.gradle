@@ -26,7 +26,8 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.9.3'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.6.3'
-    
+    implementation 'redis.clients:jedis:jedis-3.6.2'
+    implementation 'com.google.code.gson:gson'
 
     implementation group: 'io.micrometer', name: 'micrometer-core', version: '1.8.3'
     implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.8.3'
