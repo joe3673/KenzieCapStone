@@ -39,6 +39,7 @@ public class CacheClient {
         checkForNullKey(key);
         try(Jedis jedis = pool.getResource()){
             jedis.setex(key, seconds, value);
+            pool.close();
         }
     }
 
@@ -54,7 +55,7 @@ public class CacheClient {
         checkForNullKey(key);
         try(Jedis jedis = pool.getResource()){
             String value = jedis.get(key);
-
+            pool.close();
             if(value == null){
                 return Optional.empty();
             }
@@ -77,7 +78,7 @@ public class CacheClient {
         try(Jedis jedis = pool.getResource()) {
             if (jedis.get(key) != null) {
                 jedis.del(key);
-
+                pool.close();
                 return true;
             }
             return false;
