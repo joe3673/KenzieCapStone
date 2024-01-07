@@ -160,7 +160,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void joinEvent_WhenEventDoesNotExist_ShouldReturnBadRequest() throws Exception {
+    void joinEvent_WhenEventDoesNotExist_ShouldReturnNotFound() throws Exception {
         // Given
         UserCreateRequest userCreateRequest = new UserCreateRequest();
         userCreateRequest.setPassword("f");
@@ -171,11 +171,11 @@ public class UserControllerTest {
 
         // When & Then
         queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), mockNeat.cities().toString())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void joinEvent_WhenUserDoesNotExist_ShouldReturnBadRequest() throws Exception {
+    void joinEvent_WhenUserDoesNotExist_ShouldReturnNotFound() throws Exception {
         // Given
         EventCreateRequest request = new EventCreateRequest();
         request.setEventSponsor("f");
@@ -188,7 +188,7 @@ public class UserControllerTest {
 
         // When & Then
         queryUtility.userControllerClient.joinEvent(mockNeat.users().get(), eventResponse.getEventId())
-                .andExpect(status().isOk());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -262,7 +262,7 @@ public class UserControllerTest {
         // WHEN
 
         // THEN
-        queryUtility.userControllerClient.shareEventsWithFriend(userCreateRequest.getUserName(), mockNeat.cities().toString())
+        queryUtility.userControllerClient.shareEventsWithFriend(userCreateRequest.getUserName(), mockNeat.cities().us().get())
                 .andExpect(status().isNotFound());
     }
 
