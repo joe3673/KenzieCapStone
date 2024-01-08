@@ -47,19 +47,6 @@ class AccountCreation extends BaseClass {
         }
 
 
-
-        // **Probably need to update this later - Submit the user data to the server using UserClient
-        this.client.createUser({
-            firstName,
-            lastName,
-            userName,
-            email,
-            password,
-            userType,
-        });
-    }
-}
-
 //Main method to run when the page contents have loaded
 const main = async () => {
     const accountCreation = new AccountCreation();
