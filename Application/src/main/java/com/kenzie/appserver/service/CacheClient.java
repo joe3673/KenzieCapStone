@@ -37,8 +37,8 @@ public class CacheClient {
             expiryMap.put(key, LocalDateTime.now());
         }
 
-        public Optional<String> getValue(String key){
-            return Optional.of(cacheMap.get(key));
+        public String getValue(String key){
+            return cacheMap.get(key);
         }
 
         public void invalidate(String key){
@@ -120,7 +120,13 @@ public class CacheClient {
         catch (Exception ex){
             System.out.println(ex.getMessage());
         }
-        return cache.getValue(key);
+        String value = cache.getValue(key);
+        if(value == null){
+            return Optional.empty();
+        }
+        else{
+            return Optional.of(value);
+        }
 
     }
 
