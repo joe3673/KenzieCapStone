@@ -5,6 +5,7 @@ import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.model.Event;
+import com.kenzie.capstone.service.model.NotificationData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,15 @@ public class EventController{
     private EventService eventService;
     public EventController(EventService eventService) {
         this.eventService = eventService;
+    }
+
+    @GetMapping("/{eventId}/notification")
+    public NotificationData getEventNotification(@PathVariable String eventId) {
+        return eventService.getNotificationDataFromLambda(eventId);
+    }
+    @PostMapping("/notification")
+    public NotificationData setEventNotification(@RequestBody String data) {
+        return eventService.setNotificationDataFromLambda(data);
     }
 
     @GetMapping("/{eventId}")

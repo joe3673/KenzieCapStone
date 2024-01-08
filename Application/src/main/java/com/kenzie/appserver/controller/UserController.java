@@ -13,6 +13,8 @@ import com.kenzie.appserver.service.EventService;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
+import com.kenzie.capstone.service.model.NotificationData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +31,18 @@ public class UserController {
 
     private final EventService eventService;
 
+    @Autowired
     public UserController(UserService userService, EventService eventService) {
         this.userService = userService;
         this.eventService = eventService;
+    }
+    @GetMapping("/{userId}/notification")
+    public ResponseEntity<NotificationData> getUserNotification(@PathVariable("userId") String userId) {
+        return ResponseEntity.ok(userService.getNotificationDataFromLambda(userId));
+    }
+    @PostMapping("/{userId}/notification")
+    public ResponseEntity<NotificationData> setUserNotification(@PathVariable("userId") String userId, @RequestBody String data) {
+       return ResponseEntity.ok(userService.setNotificationDataInLambda(data));
     }
 
     @GetMapping("/{userId}")
@@ -184,7 +195,7 @@ public class UserController {
         userResponse.setFriends(user.getFriends());
         return userResponse;
     }
-  
+
     private UserResponse createUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUserID(user.getUserID());

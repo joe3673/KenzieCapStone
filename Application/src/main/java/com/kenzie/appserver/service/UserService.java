@@ -11,6 +11,7 @@ import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.NotificationData;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,12 +23,20 @@ public class UserService {
     private UserRepository userRepository;
 
     private EventRepository eventRepository;
+    private LambdaServiceClient lambdaServiceClient;
 
 
 
-    public UserService(UserRepository userRepository, EventRepository eventRepository) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, LambdaServiceClient lambdaServiceClient) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.lambdaServiceClient = lambdaServiceClient;
+    }
+    public NotificationData getNotificationDataFromLambda(String notificationId) {
+        return lambdaServiceClient.getNotificationData(notificationId);
+    }
+    public NotificationData setNotificationDataInLambda(String data) {
+        return lambdaServiceClient.getNotificationData(data);
     }
 
     public UserRecord findUserById(String id) {
