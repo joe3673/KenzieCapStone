@@ -10,6 +10,8 @@ import com.kenzie.appserver.repositories.model.EventRecord;
 
 import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
+import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.NotificationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +30,21 @@ public class EventService {
 
     Gson gson = new Gson();    
     private CacheClient cacheClient;
+    private LambdaServiceClient lambdaServiceClient;
 
 
-    public EventService(EventRepository eventRepository, UserRepository userRepository, CacheClient cacheClient){
+    public EventService(EventRepository eventRepository, UserRepository userRepository, CacheClient cacheClient, LambdaServiceClient lambdaServiceClient){
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.cacheClient = cacheClient;
+        this.lambdaServiceClient = lambdaServiceClient;
     }
-
+    public NotificationData getNotificationDataFromLambda(String notificationId) {
+        return lambdaServiceClient.getNotificationData(notificationId);
+    }
+    public NotificationData setNotificationDataFromLambda(String data) {
+        return lambdaServiceClient.setNotificationData(data);
+    }
 
     private EventRecord fromJson(String json) {
         return gson.fromJson(json, new TypeToken<EventRecord>() { }.getType());
