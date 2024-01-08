@@ -2,11 +2,15 @@ package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.controller.model.EventCreateRequest;
+import com.kenzie.appserver.service.EventService;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,7 +26,8 @@ import com.kenzie.appserver.controller.model.*;
 
 @IntegrationTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -32,6 +37,8 @@ public class UserControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
+    @MockBean
+    private EventService eventService;
 
     @BeforeAll
     public void setup(){
@@ -124,7 +131,8 @@ public class UserControllerTest {
         queryUtility.userControllerClient.addUser(userCreateRequest);
         // When & Then
         queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), "m")
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userID").isNotEmpty());
     }
 
     @Test

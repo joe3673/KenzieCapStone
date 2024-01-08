@@ -47,25 +47,25 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("userId") String userId) {
-        UserRecord user;
-        try{
-            user = userService.findUserById(userId);
-        }
-        catch (UserNotFoundException ex){
+        try {
+            UserRecord user = userService.findUserById(userId);
+            UserResponse userResponse = createUserResponseFromRecord(user);
+            return ResponseEntity.ok(userResponse);
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
-
-        UserResponse userResponse = createUserResponseFromRecord(user);
-        return ResponseEntity.ok(userResponse);
     }
 
 
-    @PostMapping("/{userName}")
-    public ResponseEntity<UserResponse> loginUser(@PathVariable("userName") String userName, @RequestBody String password){
-        if(userService.validateUser(userName, password)){
-            return getUserById(userName);
-        }
-        else{
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> loginUser(@RequestBody UserCreateRequest userCreateRequest) {
+        try {
+            if (userService.validateUser(userCreateRequest.getUserName(), userCreateRequest.getPassword())) {
+                return getUserById(userCreateRequest.getUserName());
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (UserNotFoundException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -126,7 +126,7 @@ public class UserController {
             userService.addEventToList(userId, eventId);
             return ResponseEntity.ok().build();
         }
-        catch (Exception ex){
+        catch (UserNotFoundException | EventNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -146,12 +146,12 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                       @RequestBody String eventId){
+                                                       @PathVariable String eventId){
         try{
             userService.shareEventWithFriend(userId, eventId);
             return ResponseEntity.ok().build();
         }
-        catch(UserNotFoundException ex){
+        catch (UserNotFoundException | EventNotFoundException ex){
             return ResponseEntity.notFound().build();
         }
     }

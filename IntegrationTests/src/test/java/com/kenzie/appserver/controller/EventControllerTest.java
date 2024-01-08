@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -43,6 +44,12 @@ public class EventControllerTest{
     @Autowired
     private MockMvc mockMvc;
 
+    @Mock
+    private EventService eventService;
+
+    @InjectMocks
+    private EventController eventController;
+
     private QueryUtility queryUtility;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -51,10 +58,10 @@ public class EventControllerTest{
 
 
     @BeforeAll
-    public void setup(){
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
         queryUtility = new QueryUtility(mockMvc);
     }
-
 
     @Test
     void whenDeleteEventById_thenEventIsDeleted() throws Exception {
