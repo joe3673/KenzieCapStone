@@ -87,7 +87,7 @@ public class CacheClient {
      * @param seconds The number of seconds during which the item is available
      * @param value   String representing the value set in the cache
      */
-    public void setValue(String key, long seconds, String value){
+    public void setValue(String key, int seconds, String value){
         checkForNullKey(key);
         try {
             jedi.setex(key, seconds, value);
