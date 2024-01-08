@@ -95,9 +95,7 @@ public class CacheClient {
         catch (Exception ex){
             System.out.println(ex.getMessage());
         }
-        finally{
-            cache.setValue(key, value);
-        }
+        cache.setValue(key, value);
     }
 
     /**
@@ -114,7 +112,7 @@ public class CacheClient {
             String value = jedi.get(key);
             if (value == null) {
                 return Optional.empty();
-            } 
+            }
             else {
                 return Optional.of(value);
             }
@@ -143,7 +141,7 @@ public class CacheClient {
                 return true;
             }
             return false;
-        } 
+        }
         catch (Exception ex){
             System.out.println(ex.getMessage());
         }
