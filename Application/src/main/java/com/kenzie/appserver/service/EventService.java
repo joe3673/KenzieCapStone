@@ -56,7 +56,7 @@ public class EventService {
 
     public EventRecord getRecord(String id){
         Optional<String> temp = cacheClient.getValue(id);
-        if(temp.isPresent()){
+        if (temp != null && temp.isPresent()) {
             return fromJson(temp.get());
         }
         return null;

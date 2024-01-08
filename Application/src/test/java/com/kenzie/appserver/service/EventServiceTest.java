@@ -151,7 +151,7 @@ public class EventServiceTest {
         // THEN
         verify(eventRepository).deleteById(eventId);
         verify(userRepository, atLeastOnce()).save(any(UserRecord.class));
-        assertEquals(mockUserRecord.getEventsList().size(), 0);
+        assertTrue(mockUserRecord.getEventsList().isEmpty(), "User events list should be empty after event deletion");
     }
 
     @Test
