@@ -1,9 +1,7 @@
 package com.kenzie.appserver.controller;
 
 
-import com.kenzie.appserver.controller.model.EventResponse;
-import com.kenzie.appserver.controller.model.UserCreateRequest;
-import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.exception.EventNotFoundException;
 import com.kenzie.appserver.exception.UserAlreadyExistsException;
 import com.kenzie.appserver.exception.UserNotFoundException;
@@ -117,9 +115,9 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/EventList")
-    public ResponseEntity<Void> joinEvent(@PathVariable("userId") String userId, @RequestBody String eventId){
+    public ResponseEntity<Void> joinEvent(@PathVariable("userId") String userId, @RequestBody JoinEventRequest joinEventRequest){
         try {
-            userService.addEventToList(userId, eventId);
+            userService.addEventToList(userId, joinEventRequest.getEventId());
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();
@@ -128,9 +126,9 @@ public class UserController {
 
 
     @PostMapping("/{userId}/FriendList")
-    public ResponseEntity<Void> addFriend(@PathVariable("userId") String userId, @RequestBody String friendId){
+    public ResponseEntity<Void> addFriend(@PathVariable("userId") String userId, @RequestBody AddFriendRequest addFriendRequest){
         try {
-            userService.addFriend(userId, friendId);
+            userService.addFriend(userId, addFriendRequest.getFriendId());
             return ResponseEntity.ok().build();
         }
         catch (UserNotFoundException ex){
@@ -140,8 +138,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                      @RequestBody String eventId) {
+    public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId, @RequestBody String eventId) {
         try {
             userService.shareEventWithFriend(userId, eventId);
             return ResponseEntity.ok().build();
@@ -164,7 +161,9 @@ public class UserController {
         List<Event> events = new ArrayList<>(eventsAttendedByFriends.size());
         for(int i = 0, size = eventsAttendedByFriends.size(); i < size; ++i){
             try{
+                System.out.println(eventsAttendedByFriends.get(i));
                 events.add(eventService.findByEventId(eventsAttendedByFriends.get(i)));
+
             }
             catch(EventNotFoundException ex){
 
@@ -188,6 +187,7 @@ public class UserController {
         userResponse.setNotifications(user.getNotifications());
         userResponse.setUserType(user.getUserType());
         userResponse.setFriends(user.getFriends());
+        userResponse.setEventsList(user.getEventsList());
         return userResponse;
     }
 
@@ -201,12 +201,20 @@ public class UserController {
         userResponse.setNotifications(user.getNotifications());
         userResponse.setUserType(user.getUserType());
         userResponse.setFriends(user.getFriends());
+        userResponse.setEventsList(user.getEventsList());
         return userResponse;
     }
 
-    private  EventResponse createEventResponse(Event event) {
+    private EventResponse createEventResponse(Event event) {
         EventResponse eventResponse = new EventResponse();
-//        Set other event properties?
+        eventResponse.setEventId(event.getEventID());
+        eventResponse.setName(event.getName());
+        eventResponse.setLocation(event.getLocation());
+        eventResponse.setStartTime(event.getStartTime());
+        eventResponse.setEndTime(event.getEndTime());
+        eventResponse.setPeopleAttending(event.getPeopleAttending());
+        eventResponse.setPeopleAttended(event.getPeopleAttended());
+        eventResponse.setEventSponsor(event.getEventSponsor());
         return eventResponse;
     }
 }
