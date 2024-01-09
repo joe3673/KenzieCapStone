@@ -9,7 +9,8 @@ export default class UserClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'addUser', 'loginUser', 'getUser', 'getAllUsers', 'deleteUser', 'joinEvent', 'addFriend', 'shareEventsWithFriends', 'getEventsAttendedByFriends'];
+        const methodsToBind = ['clientLoaded', 'addUser', 'loginUser', 'getUser', 'getAllUsers', 'deleteUser',
+                                'joinEvent', 'addFriend', 'shareEventsWithFriends', 'getEventsAttendedByFriends'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -80,6 +81,18 @@ export default class UserClient extends BaseClass {
             }
     }
 
+    //***Another Option to try if above doesn't work****
+//    async getAllUsers(errorHandler) {
+//                try {
+//                    const response = await fetch(`http://localhost:8080/User/all`);
+//                    const users = await response.json();
+//                    return users;
+//                } catch (error) {
+//                    errorHandler(error);
+//                }
+//        }
+
+
     async deleteUser(userId, errorCallback){
         try {
             const response = await this.client.delete(`/User/${userId}`);
@@ -104,7 +117,7 @@ export default class UserClient extends BaseClass {
     async addFriend(userId, friendId, errorCallback){
         console.log(userId, friendId)
          try {
-             await this.client.post(`/User/${userId}/friendlist`, {
+             await this.client.post(`/User/${userId}/FriendList`, {
              "friendId": friendId
              });
          } catch (error) {

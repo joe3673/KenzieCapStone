@@ -8,7 +8,6 @@ import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
-import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.NotificationData;
@@ -111,8 +110,8 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        if (userRepository.existsById(user.getUserID())) {
-            UserRecord ur = new UserRecord(user.getUserID(),
+        if (userRepository.existsById(user.getUserId())) {
+            UserRecord ur = new UserRecord(user.getUserId(),
                     user.getUserName(),
                     user.getPassword(),
                     user.getEventsList(),
