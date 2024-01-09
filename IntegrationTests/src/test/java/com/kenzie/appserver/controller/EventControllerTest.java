@@ -44,10 +44,10 @@ public class EventControllerTest{
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    
     private EventService eventService;
 
-    @InjectMocks
+
     private EventController eventController;
 
     private QueryUtility queryUtility;
@@ -59,7 +59,6 @@ public class EventControllerTest{
 
     @BeforeAll
     public void setup() {
-        MockitoAnnotations.openMocks(this);
         queryUtility = new QueryUtility(mockMvc);
     }
 
