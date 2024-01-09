@@ -31,7 +31,7 @@ public class UserController {
 
     private final EventService eventService;
 
-    @Autowired
+
     public UserController(UserService userService, EventService eventService) {
         this.userService = userService;
         this.eventService = eventService;
@@ -125,7 +125,7 @@ public class UserController {
         try {
             userService.addEventToList(userId, eventId);
             return ResponseEntity.ok().build();
-        } catch (UserNotFoundException | EventNotFoundException ex) {
+        } catch (Exception ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -145,7 +145,6 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                      @RequestParam String friendId,
                                                       @RequestParam String eventId) {
         try {
             userService.shareEventWithFriend(userId, eventId);
