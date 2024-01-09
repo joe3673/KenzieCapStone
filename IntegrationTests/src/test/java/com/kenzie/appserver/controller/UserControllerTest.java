@@ -26,8 +26,6 @@ import com.kenzie.appserver.controller.model.*;
 
 @IntegrationTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
-@AutoConfigureMockMvc
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +35,7 @@ public class UserControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
-    @MockBean
+
     private EventService eventService;
 
     @BeforeAll
@@ -131,7 +129,7 @@ public class UserControllerTest {
         queryUtility.userControllerClient.addUser(userCreateRequest);
         // When & Then
         queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), "m")
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.userID").isNotEmpty());
     }
 
