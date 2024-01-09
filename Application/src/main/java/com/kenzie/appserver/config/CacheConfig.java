@@ -1,11 +1,9 @@
 package com.kenzie.appserver.config;
 
-import com.kenzie.appserver.service.CacheClient;
+import com.kenzie.appserver.cache.CacheClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.cache.annotation.EnableCaching;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
