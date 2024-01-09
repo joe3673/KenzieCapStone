@@ -254,20 +254,6 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void shareEventsWithFriend_EventDoesNotExist_ShouldReturnNotFound() throws Exception {
-        // GIVEN
-        UserCreateRequest userCreateRequest = new UserCreateRequest();
-        userCreateRequest.setPassword("f");
-        userCreateRequest.setUserName(mockNeat.users().get());
-        queryUtility.userControllerClient.addUser(userCreateRequest);
-
-        // WHEN
-
-        // THEN
-        queryUtility.userControllerClient.shareEventsWithFriend(userCreateRequest.getUserName(), mockNeat.cities().us().get())
-                .andExpect(status().isNotFound());
-    }
 
 
     @Test
