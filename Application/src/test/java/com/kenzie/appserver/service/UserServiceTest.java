@@ -9,11 +9,9 @@ import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -194,7 +192,7 @@ public class UserServiceTest {
         // GIVEN
         User user = new User("f", "f", "f", "f", "f", "f");
         when(userRepository.save(any(UserRecord.class))).thenReturn(mockUser);
-        when(userRepository.existsById(user.getUserID())).thenReturn(true);
+        when(userRepository.existsById(user.getUserId())).thenReturn(true);
 
         // WHEN
         userService.updateUser(user);
@@ -208,7 +206,7 @@ public class UserServiceTest {
     void updateUser_UserDoesNotExist() {
         // GIVEN
         User nonExistingUser = new User("f", "f", "f", "f", "f", "f");
-        when(userRepository.existsById(nonExistingUser.getUserID())).thenReturn(false);
+        when(userRepository.existsById(nonExistingUser.getUserId())).thenReturn(false);
 
         // WHEN & THEN
         userService.updateUser(nonExistingUser);

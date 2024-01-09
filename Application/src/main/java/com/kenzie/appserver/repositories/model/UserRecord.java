@@ -25,7 +25,8 @@ public class UserRecord{
     private List<String> friends;
 
 
-    public UserRecord(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType, List<String> friends){
+    public UserRecord(String userID, String userName, String password, List<String> eventsList, String email, String firstName,
+                      String lastName, List<String> notifications, String userType, List<String> friends){
         this.userID = userID;
         this.userName = userName;
         this.password = password;
@@ -96,7 +97,7 @@ public class UserRecord{
         return email;
     }
 
-    public void setEmail(){
+    public void setEmail(String email){
         this.email = email;
     }
 

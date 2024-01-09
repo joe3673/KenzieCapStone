@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class User{
 
-    private final String userID;
+    private final String userId;
     private final String userName;
     private final String password;
     private final List<String> eventsList;
@@ -20,7 +20,7 @@ public class User{
 
 
     public User(String userID, String userName, String password, List<String> eventsList, String email, String firstName, String lastName, List<String> notifications, String userType, List<String> friends) {
-        this.userID = userID;
+        this.userId = userID;
         this.userName = userName;
         this.password = password;
         this.eventsList = eventsList;
@@ -32,8 +32,9 @@ public class User{
         this.friends = friends;
     }
 
+
     public User(String userName, String password, String email, String firstName, String lastName, String userType) {
-        this.userID = userName;
+        this.userId = UUID.randomUUID().toString();
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -46,8 +47,8 @@ public class User{
         this.friends = new ArrayList<>();
     }
 
-    public String getUserID(){
-        return userID;
+    public String getUserId(){
+        return userId;
     }
 
     public String getUserName() {

@@ -117,7 +117,7 @@ export default class UserClient extends BaseClass {
     async addFriend(userId, friendId, errorCallback){
         console.log(userId, friendId)
          try {
-             await this.client.post(`/User/${userId}/friendlist`, {
+             await this.client.post(`/User/${userId}/FriendList`, {
              "friendId": friendId
              });
          } catch (error) {

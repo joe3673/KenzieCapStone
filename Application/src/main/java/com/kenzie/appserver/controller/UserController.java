@@ -4,7 +4,6 @@ package com.kenzie.appserver.controller;
 import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.UserCreateRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
-import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.exception.EventNotFoundException;
 import com.kenzie.appserver.exception.UserAlreadyExistsException;
 import com.kenzie.appserver.exception.UserNotFoundException;
@@ -14,15 +13,12 @@ import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.model.NotificationData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/User")
@@ -85,7 +81,7 @@ public class UserController {
         try {
             UserRecord user = userService.addNewUser(userCreateRequest.getUserName(), userCreateRequest.getPassword(), userCreateRequest.getEmail(), userCreateRequest.getFirstName(), userCreateRequest.getLastName(), userCreateRequest.getUserType());
             UserResponse userResponse = createUserResponseFromRecord(user);
-            return ResponseEntity.created(URI.create("/users/" + userResponse.getUserID())).body(userResponse);
+            return ResponseEntity.created(URI.create("/User/" + userResponse.getUserID())).body(userResponse);
         }
         catch (UserAlreadyExistsException ex){
             return ResponseEntity.badRequest().build();
@@ -197,7 +193,7 @@ public class UserController {
 
     private UserResponse createUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
-        userResponse.setUserID(user.getUserID());
+        userResponse.setUserID(user.getUserId());
         userResponse.setUserName(user.getUserName());
         userResponse.setEmail(user.getEmail());
         userResponse.setFirstName(user.getFirstName());
