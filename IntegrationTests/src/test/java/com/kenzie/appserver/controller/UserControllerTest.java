@@ -2,15 +2,11 @@ package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.controller.model.EventCreateRequest;
-import com.kenzie.appserver.service.EventService;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,6 +22,7 @@ import com.kenzie.appserver.controller.model.*;
 
 @IntegrationTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -35,8 +32,6 @@ public class UserControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
-
-    private EventService eventService;
 
     @BeforeAll
     public void setup(){
@@ -116,7 +111,7 @@ public class UserControllerTest {
         userCreateRequest.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest);
         // When & Then
-        queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), userCreateRequest.getPassword())
+        queryUtility.userControllerClient.loginUser(userCreateRequest)
                 .andExpect(status().isOk());
     }
 
@@ -127,18 +122,20 @@ public class UserControllerTest {
         userCreateRequest.setPassword("f");
         userCreateRequest.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest);
+        userCreateRequest.setPassword("g");
         // When & Then
-        queryUtility.userControllerClient.loginUser(userCreateRequest.getUserName(), "m")
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.userID").isNotEmpty());
+        queryUtility.userControllerClient.loginUser(userCreateRequest)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     void loginUser_UserDoesNotExist_ShouldReturnBadRequest() throws Exception{
         // Given
-
+        UserCreateRequest userCreateRequest = new UserCreateRequest();
+        userCreateRequest.setPassword("f");
+        userCreateRequest.setUserName(mockNeat.users().get());
         // When & Then
-        queryUtility.userControllerClient.loginUser(mockNeat.users().get(), "m")
+        queryUtility.userControllerClient.loginUser(userCreateRequest)
                 .andExpect(status().isBadRequest());
     }
 
