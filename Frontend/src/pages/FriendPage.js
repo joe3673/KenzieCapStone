@@ -33,6 +33,7 @@ class FriendPage extends BaseClass {
 	     for(let i = 0; i < friendList.length; ++i){
 		 let friend = friendList[i];
 		 htmlResponse += `<li><h3>username ${friend.userName}</h3></li>`;
+		 await this.getAllUsers();
 
 			}
   		 resultArea.innerHTML = htmlResponse;
@@ -73,6 +74,18 @@ class FriendPage extends BaseClass {
 			}
   		 resultArea.innerHTML = htmlResponse;
     }
+    async getAllUsers() {
+            const users = await this.client.getAllUsers(this.errorHandler);
+            let userListHtml = "<ul>";
+            for (const user of users) {
+                userListHtml += `<li><h3>Username: ${user.userName}</h3></li>`;
+            }
+            userListHtml += "</ul>";
+
+            const userListArea = document.getElementById("user-list");
+            userListArea.innerHTML = userListHtml;
+        }
+
 
 }
 

@@ -9,7 +9,8 @@ export default class UserClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'addUser', 'loginUser', 'getUser', 'getAllUsers', 'deleteUser', 'joinEvent', 'addFriend', 'shareEventsWithFriends', 'getEventsAttendedByFriends'];
+        const methodsToBind = ['clientLoaded', 'addUser', 'loginUser', 'getUser', 'getAllUsers', 'deleteUser',
+                                'joinEvent', 'addFriend', 'shareEventsWithFriends', 'getEventsAttendedByFriends'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -79,6 +80,18 @@ export default class UserClient extends BaseClass {
                  this.handleError("getAllUsers", error, errorCallback)
             }
     }
+
+    //***Another Option to try if above doesn't work****
+//    async getAllUsers(errorHandler) {
+//                try {
+//                    const response = await fetch(`http://localhost:8080/User/all`);
+//                    const users = await response.json();
+//                    return users;
+//                } catch (error) {
+//                    errorHandler(error);
+//                }
+//        }
+
 
     async deleteUser(userId, errorCallback){
         try {
