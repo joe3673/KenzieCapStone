@@ -40,8 +40,8 @@ public class QueryUtility{
         public ResultActions getAllUsers() throws Exception{
             return mvc.perform(get("/User/all").accept(MediaType.APPLICATION_JSON));
         }
-        public ResultActions loginUser(String userName, String password) throws Exception {
-            return mvc.perform(post("/User/{userName}", userName).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(password));
+        public ResultActions loginUser(UserCreateRequest userCreateRequest) throws Exception {
+            return mvc.perform(post("/User/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(userCreateRequest)));
         }
 
         public ResultActions addUser(UserCreateRequest userCreateRequest) throws Exception {
