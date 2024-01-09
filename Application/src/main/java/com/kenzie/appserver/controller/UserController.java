@@ -145,7 +145,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                      @RequestParam String eventId) {
+                                                      @RequestBody String eventId) {
         try {
             userService.shareEventWithFriend(userId, eventId);
             return ResponseEntity.ok().build();
