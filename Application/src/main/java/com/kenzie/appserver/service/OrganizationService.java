@@ -6,6 +6,7 @@ import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.OrganizationRecord;
 import com.kenzie.appserver.service.model.Organization;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Service
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;

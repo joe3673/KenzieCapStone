@@ -61,7 +61,7 @@ public class UserController {
     public ResponseEntity<UserResponse> loginUser(@RequestBody UserCreateRequest userCreateRequest) {
         try {
             if (userService.validateUser(userCreateRequest.getUserName(), userCreateRequest.getPassword())) {
-                return getUserById(userCreateRequest.getUserName());
+                return ResponseEntity.ok(getUserById(userCreateRequest.getUserName()).getBody());
             } else {
                 return ResponseEntity.badRequest().build();
             }
@@ -122,11 +122,10 @@ public class UserController {
 
     @PostMapping("/{userId}/EventList")
     public ResponseEntity<Void> joinEvent(@PathVariable("userId") String userId, @RequestBody String eventId){
-        try{
+        try {
             userService.addEventToList(userId, eventId);
             return ResponseEntity.ok().build();
-        }
-        catch (UserNotFoundException | EventNotFoundException ex) {
+        } catch (UserNotFoundException | EventNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -146,8 +145,9 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> shareEventsWithFriend(@PathVariable("userId") String userId,
-                                                       @PathVariable String eventId){
-        try{
+                                                      @RequestParam String friendId,
+                                                      @RequestParam String eventId) {
+        try {
             userService.shareEventWithFriend(userId, eventId);
             return ResponseEntity.ok().build();
         }
