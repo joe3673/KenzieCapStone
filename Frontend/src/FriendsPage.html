@@ -1,0 +1,62 @@
+<!--
+Friends page. Can add friends and see
+what events they have joined.
+
+Has a link leading back to user profile page.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friends Page</title>
+    <script type="text/javascript" src="FriendPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
+
+    <style>
+        body {
+            font-family: "Trirong", serif;
+
+        }
+
+    </style>
+</head>
+<body>
+
+<header class="header" id="header">
+    <div class="site-title">
+        <h2 class="header-title">Friends List</h2>
+        <p class="sub-title">Add friends and see what events they have joined.</p>
+    </div>
+    <div>
+        <a href="UserProfile.html">Back to Profile</a>
+    </div>
+</header>
+
+<div class="card">
+    <h3>Add Friends</h3>
+    <form id="add-friend-form">
+        <label for="friend-username">Friend's Username</label>
+        <input type="text" id="friend-username" required>
+        <button type="button" id = "add">Add Friend</button>
+    </form>
+
+    <h3>Friends List</h3>
+    <span id="friends-list">
+    </span>
+
+    <h3>Friend's Joined Events</h3>
+    <form id = "get-friend-events">
+        <label for = "username">Friend's Username</label>
+        <input type = "text" id = "username" required>
+        <button type = "submit">Get Friend's Joined Events</button>
+    </form>
+    <span id = "friend-events"></span>
+
+</div>
+
+
+</body>
+</html>
