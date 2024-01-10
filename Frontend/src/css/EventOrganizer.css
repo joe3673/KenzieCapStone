@@ -1,0 +1,16 @@
+        body {
+          font-family: "Trirong", serif;
+        }
+        body {
+  background-image: url("marble-banner.png");
+        background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+        .form-field {
+    margin-bottom: 15px;
+}
+
+input, label, button {
+    margin-bottom: 10px;
+}

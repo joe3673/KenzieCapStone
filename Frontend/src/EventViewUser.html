@@ -1,0 +1,60 @@
+<!--
+Event Page for logged-in users. They can get events
+and join events.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Current Events</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="EventViewPageUser.js"></script>
+</head>
+
+<body class="background">
+
+<header class="header" id="header">
+    <div class="site-title">
+        <h2 class="header-title">Current Events </h2>
+        <p class="sub-title">Empower Change, Ignite Impact: Every Event Counts, Every Effort Matters.</p>
+    </div>
+    <div class="navigation-links">
+        <a href="index.html">Home</a>
+        <a href="index.html">User Profile</a>
+    </div>
+</header>
+
+<div class="events-container">
+    <div class="event-box" id="all-events-box">
+        <h3>All Current Events</h3>
+        <ul id="all-events-list"></ul>
+    </div>
+    <div class="event-box" id="attended-events-box">
+        <h3>Your Attended Events</h3>
+        <ul id="attended-events-list"></ul>
+        <span id="attendedevents"></span>
+    </div>
+</div>
+
+
+
+    <div class="card">
+        <form class="event-info" id="add-form">
+
+            <div class="form-field">
+                <label for="eventId">Name</label>
+                <input type="text" required class="validated-field" id="eventId">
+            </div>
+            <div class="form-field">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+
+</html>
