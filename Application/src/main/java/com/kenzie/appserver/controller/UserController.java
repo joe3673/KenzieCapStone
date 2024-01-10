@@ -30,13 +30,13 @@ public class UserController {
         this.userService = userService;
         this.eventService = eventService;
     }
-    @GetMapping("/{userId}/notification")
-    public ResponseEntity<NotificationData> getUserNotification(@PathVariable("userId") String userId) {
-        return ResponseEntity.ok(userService.getNotificationDataFromLambda(userId));
+    @PutMapping("/{userId}/notification")
+    public ResponseEntity<NotificationData> getUserNotification(@PathVariable("userId") String userId, @RequestBody GetNotificationRequest getNotificationRequest) {
+        return ResponseEntity.ok(userService.getNotificationDataFromLambda(getNotificationRequest.getNotificationId()));
     }
     @PostMapping("/{userId}/notification")
-    public ResponseEntity<NotificationData> setUserNotification(@PathVariable("userId") String userId, @RequestBody String data) {
-       return ResponseEntity.ok(userService.setNotificationDataInLambda(data));
+    public ResponseEntity<NotificationData> setUserNotification(@PathVariable("userId") String userId, @RequestBody AddNotificationRequest addNotificationRequest) {
+       return ResponseEntity.ok(userService.setNotificationDataInLambda(addNotificationRequest.getData()));
     }
 
     @GetMapping("/{userId}")
