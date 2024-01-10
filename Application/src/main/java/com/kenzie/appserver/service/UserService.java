@@ -35,7 +35,7 @@ public class UserService {
         return lambdaServiceClient.getNotificationData(notificationId);
     }
     public NotificationData setNotificationDataInLambda(String data) {
-        return lambdaServiceClient.getNotificationData(data);
+        return lambdaServiceClient.setNotificationData(data);
     }
 
     public UserRecord findUserById(String id) {
@@ -132,6 +132,7 @@ public class UserService {
     }
 
     public void addFriend(String userId, String friendId){
+        System.out.println(userId + " " + friendId);
         Optional<UserRecord> ur = userRepository.findById(userId);
         Optional<UserRecord> fr = userRepository.findById(friendId);
         if(ur.isPresent() && fr.isPresent()){
@@ -167,6 +168,7 @@ public class UserService {
         if(user == null){
             throw new UserNotFoundException("User " + userId + " does not exist.");
         }
+        System.out.println(userId);
         return user.getEventsList();
     }
 
