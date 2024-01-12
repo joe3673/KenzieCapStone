@@ -12,12 +12,14 @@ class EventPageUser extends BaseClass {
 
     constructor() {
         super();
-        this.bindClassMethods(['loadEvents', 'displayEvents'], this);
+        this.bindClassMethods(['loadEvents', 'displayEvents', 'addEvent'], this);
         this.dataStore = new DataStore();
     }
 
     async mount() {
         this.client = new EventClient();
+        console.log(localStorage['unitybuildersuserinfo'])
+        document.getElementById('add-form').addEventListener('submit', this.addEvent);
         var stored = localStorage['unitybuildersuserinfo'];
         let user = 0;
         let attendedEvents = 0;
@@ -25,15 +27,16 @@ class EventPageUser extends BaseClass {
             user = JSON.parse(stored);
             attendedEvents = user.eventsList;
         }
-        let events = await this.client.getAllEvents( this.errorHandler);
-        let resultArea = document.getElementById("events");
+
+        let resultArea = document.getElementById("attendedevents");
         let htmlResponse = "<ul>";
-        for(let i = 0; i < events.length; ++i){
-            let event = events[i];
-            htmlResponse += `<li><h3>ID ${event.eventId}</h3><h3>Name ${event.name}</li>`;
+        for(let i = 0; i < attendedEvents.length; ++i){
+            let event = attendedEvents[i];
+            htmlResponse += `<li><h3>ID ${event}</h3></li>`;
 
         }
         resultArea.innerHTML = htmlResponse;
+
 
         await this.loadEvents(attendedEvents);
     }
@@ -44,8 +47,7 @@ class EventPageUser extends BaseClass {
 
 
         //Display events in the corresponding boxes
-        this.displayEvents('all-events-list', allEvents);
-        this.displayEvents('attended-events-list', attendedEvents);
+        this.displayEvents('all-events-box', allEvents);
     }
 
     displayEvents(containerId, events) {
@@ -55,15 +57,19 @@ class EventPageUser extends BaseClass {
             const eventList = container.querySelector('ul');
             if (eventList) {
                 events.forEach(event => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = event.name;
+                    let listItem = document.createElement('li');
+                    listItem.textContent = "ID: " + event.eventId;
+                    eventList.appendChild(listItem);
+                    listItem = document.createElement('li');
+                    listItem.textContent = "Name: " + event.name;
                     eventList.appendChild(listItem);
                 });
             }
         }
     }
 
-    async addEvent(){
+    async addEvent(event){
+        event.preventDefault()
         let client2 = new UserClient()
         let id = document.getElementById("eventId").value;
         var stored = localStorage['unitybuildersuserinfo'];
@@ -72,10 +78,13 @@ class EventPageUser extends BaseClass {
         if(stored){
             user = JSON.parse(stored);
         }
+        console.log(user.username)
+
+        await client2.joinEvent(user.username, id, this.errorHandler)
 
 
-
-        user
+        user = client2.getUser(user.username, this.errorHandler)
+        localStorage['unitybuildersuserinfo'] = JSON.stringify(user);
     }
 
 

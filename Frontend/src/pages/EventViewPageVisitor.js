@@ -18,14 +18,16 @@ class EventPageVisitor extends BaseClass {
 
     async mount() {
         this.client = new EventClient();
+        await this.loadEvents();
+
     }
 
      async loadEvents() {
          // get all events,sponsored events, &attended events from backend
-         const allEvents = await this.client.getAllEvents();
+         const allEvents = await this.client.getAllEvents(this.errorHandler);
 
          //Display events in the corresponding boxes
-         this.displayEvents('all-events-list', allEvents);
+         this.displayEvents('all-events-box', allEvents);
 
      }
 

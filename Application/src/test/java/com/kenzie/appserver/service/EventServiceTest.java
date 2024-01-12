@@ -1,5 +1,7 @@
 package com.kenzie.appserver.service;
 
+import com.google.gson.Gson;
+import com.kenzie.appserver.cache.CacheClient;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -29,6 +30,8 @@ public class EventServiceTest {
     private CacheClient cacheClient;
     @InjectMocks
     private EventService eventService;
+
+    Gson gson = new Gson();
 
     private EventRecord createMockEventRecord(String eventId, String eventName, String eventLocation, String startTime, String endTime, List<String> peopleAttending, List<String> peopleAttended, String eventSponsor) {
         return new EventRecord(eventId, eventName, eventLocation, startTime, endTime, peopleAttending,  peopleAttended, eventSponsor);
@@ -100,6 +103,32 @@ public class EventServiceTest {
         // THEN
         assertNull(event);
     }
+
+    @Test
+    void findByEventId_CacheHit() {
+        // GIVEN
+        String eventId = "existingEventId";
+        String eventName = "Event Name";
+        String eventLocation = "Event Location";
+        String startTime = LocalDateTime.now().toString();
+        String endTime = LocalDateTime.now().plusHours(2).toString();
+        List<String> peopleAttending = Arrays.asList("user1", "user2");
+        List<String> peopleAttended = Arrays.asList("user3", "user4");
+        String eventSponsor = "Sponsor Name";
+
+        EventRecord mockEventRecord = new EventRecord(eventId, eventName, eventLocation, startTime, endTime, peopleAttending,  peopleAttended, eventSponsor);
+        String json = gson.toJson(mockEventRecord);
+        when(cacheClient.getValue(eventId)).thenReturn(Optional.of(json));
+        // WHEN
+        Event event = eventService.findByEventId(eventId);
+
+        // THEN
+        assertNotNull(event);
+        assertEquals(eventId, event.getEventID());
+        assertEquals(eventName, event.getName());
+        assertEquals(eventLocation, event.getLocation());
+    }
+
 
     @Test
     void addNewEvent_Successful() {

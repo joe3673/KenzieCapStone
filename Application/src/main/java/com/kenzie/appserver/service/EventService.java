@@ -3,6 +3,7 @@ package com.kenzie.appserver.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kenzie.appserver.cache.CacheClient;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.UserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -12,7 +13,6 @@ import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.NotificationData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 

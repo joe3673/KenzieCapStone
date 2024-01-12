@@ -6,13 +6,13 @@ Parameters:
     Type: String
     Default: dev
 Resources:
-  GetExampleDataFunction:
+  GetNotificationDataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.GetExampleData
+      Handler: com.kenzie.capstone.service.lambda.GetNotificationData
       Runtime: java11
-      Description: Get Example Data for given id
+      Description: Get notification for given id
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -30,13 +30,13 @@ Resources:
           Properties:
             Path: /notification/{id}
             Method: get
-  SetExampleDataFunction:
+  SetNotificationDataFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.SetExampleData
+      Handler: com.kenzie.capstone.service.lambda.SetNotificationData
       Runtime: java11
-      Description: Set Example Data
+      Description: Set Notification Data
       MemorySize: 512
       Timeout: 240
       # Function's execution role
@@ -52,6 +52,6 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /example/
+            Path: /notification
             Method: post
 

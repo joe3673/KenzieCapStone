@@ -23,7 +23,7 @@ class FriendPage extends BaseClass {
          this.client = new UserClient();
          document.getElementById('add').onclick = this.addFriend;
          document.getElementById('add-friend-form').addEventListener('submit', this.addFriend);
-         document.getElementById('get-friend-events').addEventListener('submit', this.GetFriendEvents);
+         document.getElementById('get-friend-events').addEventListener('submit', this.getFriendEvents);
          let stored = localStorage['unitybuildersuserinfo'];
          let user = 0;
          if (stored) user = JSON.parse(stored);
@@ -31,11 +31,10 @@ class FriendPage extends BaseClass {
   		 let htmlResponse = "<ul>";
   		 let friendList = user.friends;
 	     for(let i = 0; i < friendList.length; ++i){
-		 let friend = friendList[i];
-		 htmlResponse += `<li><h3>username ${friend.userName}</h3></li>`;
-		 await this.getAllUsers();
-
+		    let friend = friendList[i];
+		    htmlResponse += `<li><h3>username ${friend}</h3></li>`;
 			}
+         await this.getAllUsers()
   		 resultArea.innerHTML = htmlResponse;
 
     }
@@ -45,40 +44,41 @@ class FriendPage extends BaseClass {
         let user = 0;
         if (stored) user = JSON.parse(stored);
         let frienduserName = document.getElementById("friend-username").value;
-        console.log(frienduserName);
-        console.log(user)
         await this.client.addFriend(user.username, frienduserName, this.errorHandler);
         user = await this.client.getUser(user.username);
-        console.log(user)
         localStorage['unitybuildersuserinfo'] = JSON.stringify(user);
          let resultArea = document.getElementById("friends-list");
   		 let htmlResponse = "<ul>";
   		 let friendList = user.friends;
 	     for(let i = 0; i < friendList.length; ++i){
 		 let friend = friendList[i];
-		 htmlResponse += `<li><h3>username ${friend.userName}</h3></li>`;
+		 htmlResponse += `<li><h3>username ${friend}</h3></li>`;
 
 			}
   		 resultArea.innerHTML = htmlResponse;
     }
 
-    async getFriendEvents(){
-         let frienduserName = document.getElementById("username");
-         let events = await this.client.getEventsAttendedByFriends(frienduserName, this.errorHandler);
+    async getFriendEvents(event){
+        event.preventDefault()
+         let frienduserName = document.getElementById("username").value;
+         let client = new UserClient()
+        console.log(frienduserName)
+         let events = await client.getEventsAttendedByFriends(frienduserName, this.errorHandler);
+         console.log(events)
          let resultArea = document.getElementById("friend-events");
   		 let htmlResponse = "<ul>";
 	     for(let i = 0; i < events.length; ++i){
-		 let event = events[i];
-		 htmlResponse += `<li><h3>ID ${event.eventId}</h3><h3>Name ${event.name}</li>`;
+		    let event = events[i];
+		    htmlResponse += `<li><h3>ID ${event.eventId}</h3><h3>Name ${event.name}</li>`;
 
-			}
+         }
   		 resultArea.innerHTML = htmlResponse;
     }
     async getAllUsers() {
             const users = await this.client.getAllUsers(this.errorHandler);
             let userListHtml = "<ul>";
             for (const user of users) {
-                userListHtml += `<li><h3>Username: ${user.userName}</h3></li>`;
+                userListHtml += `<li><h3>Username: ${user.username}</h3></li>`;
             }
             userListHtml += "</ul>";
 

@@ -48,12 +48,12 @@ public class QueryUtility{
             return mvc.perform(post("/User/").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(userCreateRequest)));
         }
 
-        public ResultActions joinEvent(String userId, String eventId) throws Exception {
-            return mvc.perform(post("/User/{userId}/EventList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(eventId));
+        public ResultActions joinEvent(String userId, JoinEventRequest joinEventRequest) throws Exception {
+            return mvc.perform(post("/User/{userId}/EventList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(joinEventRequest)));
         }
 
-        public ResultActions addFriend(String userId, String friendId) throws Exception {
-            return mvc.perform(post("/User/{userId}/FriendList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(friendId));
+        public ResultActions addFriend(String userId, AddFriendRequest addFriendRequest) throws Exception {
+            return mvc.perform(post("/User/{userId}/FriendList", userId).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(addFriendRequest)));
         }
 
         public ResultActions shareEventsWithFriend(String userId, String eventId) throws Exception {

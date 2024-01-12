@@ -34,7 +34,7 @@ public class User{
 
 
     public User(String userName, String password, String email, String firstName, String lastName, String userType) {
-        this.userId = UUID.randomUUID().toString();
+        this.userId = userName;
         this.userName = userName;
         this.password = password;
         this.email = email;

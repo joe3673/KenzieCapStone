@@ -142,7 +142,7 @@ export default class UserClient extends BaseClass {
              const response = await this.client.get(`/User/${userId}/FriendList/Events`);
              return response.data;
          } catch (error) {
-                 this.handleError("shareEventsWithFriends", error, errorCallback)
+                 this.handleError("GetEventsAttendedByFriends", error, errorCallback)
             }
     }
 

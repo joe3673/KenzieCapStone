@@ -156,9 +156,12 @@ public class UserControllerTest {
         request.setStartTime(LocalDateTime.now().toString());
         ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
         EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
+        JoinEventRequest joinEventRequest = new JoinEventRequest();
+        joinEventRequest.setUserId(userCreateRequest.getUserName());
+        joinEventRequest.setEventId(eventResponse.getEventId());
 
         // When & Then
-        queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), eventResponse.getEventId())
+        queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), joinEventRequest)
                 .andExpect(status().isOk());
     }
 
@@ -169,11 +172,13 @@ public class UserControllerTest {
         userCreateRequest.setPassword("f");
         userCreateRequest.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest);
-
+        JoinEventRequest joinEventRequest = new JoinEventRequest();
+        joinEventRequest.setUserId(userCreateRequest.getUserName());
+        joinEventRequest.setEventId(mockNeat.cities().us().get());
 
 
         // When & Then
-        queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), mockNeat.cities().toString())
+        queryUtility.userControllerClient.joinEvent(userCreateRequest.getUserName(), joinEventRequest)
                 .andExpect(status().isNotFound());
     }
 
@@ -188,9 +193,13 @@ public class UserControllerTest {
         request.setStartTime(LocalDateTime.now().toString());
         ResultActions temp = queryUtility.eventControllerClient.addNewEvent(request);
         EventResponse eventResponse = objectMapper.readValue(temp.andReturn().getResponse().getContentAsString(), EventResponse.class);
+        JoinEventRequest joinEventRequest = new JoinEventRequest();
+        joinEventRequest.setUserId(mockNeat.users().get());
+        joinEventRequest.setEventId(eventResponse.getEventId());
+
 
         // When & Then
-        queryUtility.userControllerClient.joinEvent(mockNeat.users().get(), eventResponse.getEventId())
+        queryUtility.userControllerClient.joinEvent(mockNeat.users().get(), joinEventRequest)
                 .andExpect(status().isNotFound());
     }
 
@@ -297,9 +306,12 @@ public class UserControllerTest {
         userCreateRequest2.setPassword("f");
         userCreateRequest2.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest2);
+        AddFriendRequest addFriendRequest = new AddFriendRequest();
+        addFriendRequest.setUserId(userCreateRequest.getUserName());
+        addFriendRequest.setFriendId(userCreateRequest2.getUserName());
 
         // When & Then
-        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), userCreateRequest2.getUserName())
+        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), addFriendRequest)
                 .andExpect(status().isOk());
     }
     @Test
@@ -309,10 +321,12 @@ public class UserControllerTest {
         userCreateRequest.setPassword("f");
         userCreateRequest.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest);
-
+        AddFriendRequest addFriendRequest = new AddFriendRequest();
+        addFriendRequest.setUserId(userCreateRequest.getUserName());
+        addFriendRequest.setFriendId(mockNeat.users().get());
 
         // When & Then
-        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), mockNeat.users().get())
+        queryUtility.userControllerClient.addFriend(userCreateRequest.getUserName(), addFriendRequest)
                 .andExpect(status().isNotFound());
     }
 
@@ -324,10 +338,12 @@ public class UserControllerTest {
         userCreateRequest.setPassword("f");
         userCreateRequest.setUserName(mockNeat.users().get());
         queryUtility.userControllerClient.addUser(userCreateRequest);
-
+        AddFriendRequest addFriendRequest = new AddFriendRequest();
+        addFriendRequest.setUserId(mockNeat.users().get());
+        addFriendRequest.setFriendId(userCreateRequest.getUserName());
 
         // When & Then
-        queryUtility.userControllerClient.addFriend(mockNeat.users().get(), userCreateRequest.getUserName())
+        queryUtility.userControllerClient.addFriend(mockNeat.users().get(), addFriendRequest)
                 .andExpect(status().isNotFound());
     }
 
