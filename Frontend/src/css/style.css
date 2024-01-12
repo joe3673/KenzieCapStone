@@ -13,22 +13,12 @@
 }
 */
 body {
-    font-family:  "Trirong", serif;
+     font-family: "Trirong", serif;
+                background-image: url("marble-banner.png");
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
 }
-
-.custom-background {
-      background-image: url('lowerlogo.png');
-        background-repeat: no-repeat;
-          background-attachment: fixed;
-          background-position: bottom right;
-
-}
-
-.background {
-              background-image: url("marble-logo.png");
-                 background-repeat: no-repeat;
-                           background-size: contain;
-            }
 
 .header {
     /* Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */

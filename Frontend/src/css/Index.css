@@ -1,38 +1,71 @@
-        body {
-           font-family: "Trirong", serif;
-           margin: 100;
-           padding: 0;
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           justify-content: center;
-           height: 180vh;
-           background-image: url("tall-leaves.png");
-           background-repeat: no-repeat;
-           background-size: cover;
-           background-position: center; /*background image still being a pain in the ass, come back to this */
-       }
+ body {
+            font-family: "Trirong", serif;
+            background-image: url("marble-banner.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
 
-       h1 {
-           color: #333;
-           font-size: 30px; /* quote text */
-           text-align: center;
-           }
-
-            .line {
-            margin-bottom: 0in;
         }
 
-       nav {
-           text-align: center;
-           background-color: rgba(255, 255, 255, 0.8); /* text box with links */
-           padding: 20px;
-           border-radius: 10px;
-       }
+.banner {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Set the height of your banner */
+    background-repeat: no-repeat;
+    background-image: url("top.png");
+    background-size: contain;
+    background-position: center;
+    overflow: hidden;
+}
 
-       nav a {
-           text-decoration: none;
-           color: #333;
-           margin: 10px;
-           font-size: 20px; /*Link text size */
-       }
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content {
+    position: relative;
+    background-image: url("marble-banner.png"); /* Set the path to your overlay background image */
+    background-size: auto;
+    background-position: center;
+    padding: 20px;
+    color: #fff; /* Set text color to white for better visibility against the overlay background */
+}
+
+h1 {
+    font-size: 30px;
+    text-align: center;
+}
+
+.line {
+    margin-bottom: 0in;
+}
+
+nav {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    margin: 10px;
+    font-size: 20px;
+}
+
+#logout {
+    background: #D8BFD8;
+    padding: 3px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+#logout:hover {
+    background: #BC8F8F;
+}
