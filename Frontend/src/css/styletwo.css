@@ -13,20 +13,31 @@
 }
 */
 body {
-    font-family:  "Trirong", serif;
+    background-image: url('src/css/tall-leaves.png'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    margin: 0; /* Remove default body margin */
+    font-family: 'Trirong', sans-serif; /* Apply the Google Font to the entire body */
+}
+
+h1 {
+    height: 100px; /* Adjust the height as needed */
+    margin-top: 20px; /* Adjust the margin-top as needed */
+    color: #fff; /* Set text color to white or the desired color for better visibility */
 }
 
 .custom-background {
-        background-image: url("top.png");
-                       background-repeat: no-repeat;
-                                 background-size: 20px 40px;
+    background-image: url("tall-leaves.png");
+    background-repeat: no-repeat;
+    background-size: 20px 40px;
 }
 
 .background {
-              background-image: url("top.png");
-                 background-repeat: no-repeat;
-                            background-size: 20px 40px;
-            }
+    background-image: url("tall-leaves.png");
+    background-repeat: no-repeat;
+    background-size: 20px 40px;
+}
 
 .header {
     display: flex;

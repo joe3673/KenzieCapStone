@@ -6,8 +6,6 @@ import UserClient from "../api/UserClient";
 /*
  EventPageUser. Handles javascript for the
  Event User page.
-
- ***I was trying something here but I will probably go back to my previous version, please ignore for now.
  */
 
 class EventPageUser extends BaseClass {

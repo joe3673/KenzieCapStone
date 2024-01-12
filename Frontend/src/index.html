@@ -6,6 +6,7 @@ Page for creating a user account.
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
+
     <script type="text/javascript" src="Index.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styletwo.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
@@ -13,19 +14,30 @@ Page for creating a user account.
 
 </head>
 <body>
+
+<div class="banner">
+    <img src="src/css/top.png" alt="Banner Image">
+</div>
+
 <h1>
     <div class="line">Empower Change, Ignite Impact:</div>
     <div class="line">Every Event Counts, Every Effort Matters.</div>
 </h1>
 
-<nav>
-    <a href="" id = "users">
-        <span id = "user"></span>
+<div class="content">
+
+
+
+    <nav>
+        <a href="" id="users"><span id="user"></span></a>
+        <a href="EventViewUser.html" id="events"><span id="event">Events</span></a>
+        <a href="EventOrganizer.html">Create an Event</a>
+        <a href="EventViewVisitor.html">Current Events</a>
+        <a href="UserProfile.html">User Profile</a>
+    </nav>
 
     </a>
-    <a href="EventViewUser.html" id = "events">
-        <span id = "event">Events</span>
-    </a>
+
     <a href="EventOrganizer.html">Create an Event</a>
     <a href="EventViewVisitor.html">Current Events</a>
     <a href="UserProfile.html">User Profile</a>
@@ -33,6 +45,8 @@ Page for creating a user account.
     <a href="Notification.html">Notifications</a>
 </nav>
 
-<button type="button" id = "logout">logout</button>
+
+    <button type="button" id="logout">Logout</button>
+</div>
 </body>
 </html>
