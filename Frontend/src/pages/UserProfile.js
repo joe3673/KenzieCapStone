@@ -14,7 +14,6 @@ import DataStore from "../util/DataStore";
 class UserProfile extends BaseClass {
     constructor() {
         super();
-        this.bindClassMethods([], this);
         this.dataStore = new DataStore();
     }
 
@@ -26,11 +25,12 @@ class UserProfile extends BaseClass {
         document.getElementById("lastName").textContent=user.lastName;
         document.getElementById("userName").textContent=user.username;
         document.getElementById("email").textContent=user.email;
-        document.getElementById("password").textContent=user.password;
+        document.getElementById("logout").addEventListener("click", this.logout.bind(this));
     }
-
-
-
+     logout() {
+            localStorage.removeItem('unitybuildersuserinfo');
+                window.location.href = "AccountSignIn.html";
+     }
 }
 
 /**
