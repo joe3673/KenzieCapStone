@@ -16,7 +16,8 @@ module.exports = {
     EventViewPageUser: path.resolve(__dirname, 'src', 'pages', 'EventViewPageUser.js'),
     EventViewPageVisitor: path.resolve(__dirname, 'src', 'pages', 'EventViewPageVisitor.js'),
     FriendPage: path.resolve(__dirname, 'src', 'pages', 'FriendPage.js'),
-    UserProfile: path.resolve(__dirname, 'src', 'pages', 'UserProfile.js')
+    UserProfile: path.resolve(__dirname, 'src', 'pages', 'UserProfile.js'),
+    Notification: path.resolve(__dirname, 'src', 'pages', 'NotificationPage.js')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -76,6 +77,11 @@ module.exports = {
        template: './src/UserProfile.html',
        filename: 'UserProfile.html',
        inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/Notification.html',
+      filename: 'Notification.html',
+      inject: false
     }),
      /*new HtmlWebpackPlugin({
           template: './src/index.html',//change to my page - do this for every page, yes

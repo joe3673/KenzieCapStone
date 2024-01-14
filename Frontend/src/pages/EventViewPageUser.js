@@ -16,29 +16,48 @@ class EventPageUser extends BaseClass {
         this.dataStore = new DataStore();
     }
 
-    async mount() {
+ async mount() {
+
         this.client = new EventClient();
+
         console.log(localStorage['unitybuildersuserinfo'])
         document.getElementById('add-form').addEventListener('submit', this.addEvent);
         var stored = localStorage['unitybuildersuserinfo'];
+
         let user = 0;
+
         let attendedEvents = 0;
+
         if(stored){
+
             user = JSON.parse(stored);
+
             attendedEvents = user.eventsList;
+
         }
+
+
 
         let resultArea = document.getElementById("attendedevents");
+
         let htmlResponse = "<ul>";
+
         for(let i = 0; i < attendedEvents.length; ++i){
+
             let event = attendedEvents[i];
+
             htmlResponse += `<li><h3>ID ${event}</h3></li>`;
 
+
+
         }
+
         resultArea.innerHTML = htmlResponse;
 
 
+
         await this.loadEvents(attendedEvents);
+
     }
 
     async loadEvents(attendedEvents) {
@@ -49,97 +68,84 @@ class EventPageUser extends BaseClass {
         //Display events in the corresponding boxes
         this.displayEvents('all-events-box', allEvents);
     }
+    async getEventsAttendedByFriends(userId, errorCallback) {
+        try {
+            const response = await this.client.get(`/User/${userId}/FriendList/Events`);
+            return response.data;
+        } catch (error) {
+            this.handleError("GetEventsAttendedByFriends", error, errorCallback);
+        }
+    }
+
 
     displayEvents(containerId, events) {
         //events in a scrolling list inside th container
         const container = document.getElementById(containerId);
-        if (container) {
-            const eventList = container.querySelector('ul');
-            if (eventList) {
-                events.forEach(event => {
-                    let listItem = document.createElement('li');
-                    listItem.textContent = "ID: " + event.eventId;
-                    eventList.appendChild(listItem);
-                    listItem = document.createElement('li');
-                    listItem.textContent = "Name: " + event.name;
-                    eventList.appendChild(listItem);
-                });
-            }
-        }
+         if (container) {
+
+              const eventList = container.querySelector('ul');
+
+              if (eventList) {
+
+                  events.forEach(event => {
+
+                      let listItem = document.createElement('li');
+
+                      listItem.textContent = "ID: " + event.eventId;
+
+                      eventList.appendChild(listItem);
+
+                      listItem = document.createElement('li');
+
+                      listItem.textContent = "Name: " + event.name;
+
+                      eventList.appendChild(listItem);
+
+                  });
+
+              }
+
+          }
+
+      }
+
+
+async addEvent(event) {
+    event.preventDefault();
+
+    let client2 = new UserClient();
+    let id = document.getElementById("id").value;
+
+    var stored = localStorage['unitybuildersuserinfo'];
+    let user = 0;
+    let attendedEvents = 0;
+
+    if (stored) {
+        user = JSON.parse(stored);
     }
 
-    async addEvent(event){
-        event.preventDefault()
-        let client2 = new UserClient()
-        let id = document.getElementById("eventId").value;
-        var stored = localStorage['unitybuildersuserinfo'];
-        let user = 0;
-        let attendedEvents = 0;
-        if(stored){
-            user = JSON.parse(stored);
-        }
-        console.log(user.username)
+    await client2.joinEvent(user.username, id, this.errorHandler);
 
-        await client2.joinEvent(user.username, id, this.errorHandler)
+    // Corrected: Use await to wait for the completion of getUser
+    user = await client2.getUser(user.username, this.errorHandler);
 
+    // Corrected: Update the attendedEvents after joining the event
+    attendedEvents = user.eventsList;
 
-        user = client2.getUser(user.username, this.errorHandler)
-        localStorage['unitybuildersuserinfo'] = JSON.stringify(user);
+    let resultArea = document.getElementById("attendedevents");
+    let htmlResponse = "<ul>";
+
+    for (let i = 0; i < attendedEvents.length; ++i) {
+        let event = attendedEvents[i];
+        htmlResponse += `<li><h3>ID ${event}</h3></li>`;
     }
 
+    resultArea.innerHTML = htmlResponse;
 
-
-    /*
-    async onGetAll(event){
-        event.preventDefault();
-        this.dataStore.set("EventList", null);
-        const eventList = await this.client.getAllGames(this.errorHandler);
-        this.dataStore.set("EventList", eventList);
-        if (eventList) {
-
-
-            this.showMessage('Retrieved all events')
-            let resultArea = document.getElementById("allEvents");
-		    let htmlResponse = "<ul>";
-
-			/*for(let i = 0; i < eventList.length; ++i){
-				let event = eventList[i];
-				htmlResponse += `<li><h3>ID ${event.id}</h3><h3>Name ${event.name}</h3><h3>location ${event.location}</h3><h3>Start time ${event.startTime}</h3><h3>End time ${event.endTime}</h3><h3>Sponsor ${event.eventSponsor}</h3></li>`;
-			}
-
-			resultArea.innerHTML = htmlResponse;
-           document.getElementById("eventById").textContent = ""
-
-        }
-        else {
-            this.errorHandler("Error Retrieving!  Try again...");
-        }
-    }
-
-     async onGetEvent(){
-         this.dataStore.set("Event", null);
-         let id = document.getElementById("id-field").value;
-         const event = await this.client.getEvent(id, this.errorHandler);
-         this.dataStore.set("Event", event);
-         if (event) {
-             this.showMessage('Retrieved Event')
-              let resultArea = document.getElementById("eventById");
-   		    let htmlResponse = "<ul>";
-
-   			htmlResponse += `<li><h3>ID ${event.id}</h3><h3>Name ${event.name}</h3><h3>location ${event.location}</h3><h3>Start time ${event.startTime}</h3><h3>End time ${event.endTime}</h3><h3>Sponsor ${event.eventSponsor}</h3></li>`;
-
-   			resultArea.innerHTML = htmlResponse;
-            document.getElementById("allEvents").textContent = ""
-         }
-         else {
-             this.errorHandler("Error Retrieving!  Try again...");
-         }
-
-     }
-
-        */
+    // Corrected: Load events after joining
+    await this.loadEvents(attendedEvents);
 }
-
+}
 /**
  * Main method to run when the page contents have loaded.
  */
