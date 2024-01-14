@@ -32,7 +32,7 @@ class FriendPage extends BaseClass {
   		 let friendList = user.friends;
 	     for(let i = 0; i < friendList.length; ++i){
 		    let friend = friendList[i];
-		    htmlResponse += `<li><h3>username ${friend}</h3></li>`;
+		    htmlResponse += `<li><h3>${friend}</h3></li>`;
 			}
          await this.getAllUsers()
   		 resultArea.innerHTML = htmlResponse;
